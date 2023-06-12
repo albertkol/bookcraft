@@ -17,7 +17,7 @@ pdf.set_auto_page_break(1, CONFIG["margin_size"] - 25)
 pdf.c_margin = 0
 
 pages_in_memory = 2
-pages = 1
+pages = 5
 book = "First Degree"
 pdf.set_subject(book)
 pdf.set_font("Merriweather", "", 18)

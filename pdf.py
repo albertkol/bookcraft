@@ -14,12 +14,21 @@ from helpers import (
 
 
 class PDF(FPDF):
+    cursor = Cursor(
+        CONFIG["default"]["font"],
+        CONFIG["default"]["style"],
+        CONFIG["default"]["size"],
+        CONFIG["default"]["colour"],
+        CONFIG["default"]["fill"],
+    )
+
     def header(self) -> None:
         self.set_font(
             CONFIG["header"]["font"],
             CONFIG["header"]["style"],
             CONFIG["header"]["size"],
         )
+        self.set_draw_color(*CONFIG["header"]["colour"])
         self.set_text_color(*CONFIG["header"]["colour"])
         self.set_fill_color(*CONFIG["header"]["fill"])
         width = self.fw - self.l_margin - self.r_margin
@@ -32,13 +41,13 @@ class PDF(FPDF):
         self.cell(width, height, "", 0, 1)
         self.cell(width, height, "", 0, 1)
         self.cell(width, height, "", 0, 1)
-        self.dashed_line(line_start, self.y, line_end, self.y, dash_length=3)
+        self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
         self.cell(width, height, "", 0, 1)
         self.cell(page_no_width, height, f"{self.page_no()}")
         self.cell(width - page_no_width - subject_width, height, "", 0)
         self.cell(subject_width, height, self.subject, 0, 1)
         self.cell(width, height, "", 0, 1)
-        self.dashed_line(line_start, self.y, line_end, self.y, dash_length=3)
+        self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
         self.cell(width, height, "", 0, 1)
 
     def footer(self) -> None:
@@ -47,28 +56,47 @@ class PDF(FPDF):
         bottom = self.fh - 75
 
         self.set_draw_color(*CONFIG["header"]["colour"])
-        self.dashed_line(line_start, bottom, line_end, bottom, dash_length=3)
+        self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
 
     def print_page(self, page: list[str], memory: list[list[str]]) -> None:
         self.add_page()
-
+        width = self.fw - self.l_margin - self.r_margin
         body = self._page_body(page)
-        default_cursor = Cursor(
-            CONFIG["default"]["font"],
-            CONFIG["default"]["style"],
-            CONFIG["default"]["size"],
-            CONFIG["default"]["colour"],
-            CONFIG["default"]["fill"],
-        )
         for i in range(len(body)):
             body_line = body[i]
             for j in range(len(body_line)):
                 cell = body_line[j]
-                prev_cursor = get_previous_cursor(body, i, j, default_cursor)
+                prev_cursor = get_previous_cursor(body, i, j, self.cursor)
                 cursor = self._style_cursor(cell, memory, prev_cursor)
                 cell.set_cursor(cursor)
 
-        for body_line in body:
+        for i in range(len(body)):
+            body_line = body[i]
+            memory_line = memory[0][i]
+
+            # fix italics spacing
+            clean_line_w = 0
+            for cell in body_line:
+                if cell.j in [-1, 100, 101]:
+                    continue
+
+                if cell.text == " ":
+                    continue
+
+                if "I" in cell.cursor.style:
+                    cell.width = cell.width - 0.8
+
+                clean_line_w = clean_line_w + cell.width
+
+            # justify line
+            if memory_line.count(" ") and "<<" not in memory_line:
+                space_width = (width - clean_line_w) / memory_line.count(" ")
+                for cell in body_line:
+                    if cell.text != " ":
+                        continue
+
+                    cell.width = space_width
+
             for cell in body_line:
                 cursor = cell.cursor
                 self.set_font(cursor.font, cursor.style, cursor.size)
@@ -83,6 +111,8 @@ class PDF(FPDF):
                     ln=cell.has_br,
                     fill=cell.has_fill,
                 )
+        else:
+            self.cursor = cell.cursor
 
     def _page_body(self, lines: list[str]) -> list[list[Cell]]:
         body = []
@@ -117,23 +147,9 @@ class PDF(FPDF):
                 body.append(body_line)
                 continue
 
-            # calculate justify space width
-            space_width = self.get_string_width(" ")
-            if line.count(" ") and "<<" not in line:
-                clean_line = clear_line(line, leave_spaces=False)
-                clean_line_w = self.get_string_width(clean_line)
-                space_width = (width - clean_line_w) / line.count(" ")
-
             for j in range(len(line)):
                 # skip special chars
                 if line[j] in [">", "<", "_", "#"]:
-                    continue
-
-                # add space
-                if line[j] == " ":
-                    cell = Cell(i, j, "", space_width, d_height, has_fill=True)
-                    body_line.append(cell)
-
                     continue
 
                 # add rest of char
