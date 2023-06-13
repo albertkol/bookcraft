@@ -9,6 +9,7 @@ from helpers import (
     get_previous_cursor,
     next_chars_matches,
     previous_chars_matches,
+    same_style,
     set_cursor_pros,
 )
 
@@ -70,39 +71,74 @@ class PDF(FPDF):
                 cursor = self._style_cursor(cell, memory, prev_cursor)
                 cell.set_cursor(cursor)
 
+        new_body = []
         for i in range(len(body)):
             body_line = body[i]
             memory_line = memory[0][i]
 
             # fix italics spacing
             clean_line_w = 0
+            new_cell = None
+            new_body_line = []
             for cell in body_line:
-                if cell.j in [-1, 100, 101]:
+                if cell.j in [-1, 100, 101] or len(body_line) == 1:
+                    if new_cell:
+                        clean_line_w = clean_line_w + new_cell.width
+                        new_body_line.append(new_cell)
+                        new_cell = None
+
+                    new_body_line.append(cell)
                     continue
 
                 if cell.text == " ":
+                    if new_cell:
+                        clean_line_w = clean_line_w + new_cell.width
+                        new_body_line.append(new_cell)
+                        new_cell = None
+
+                    new_body_line.append(cell)
                     continue
 
-                if "I" in cell.cursor.style:
-                    cell.width = cell.width - 0.8
+                if not new_cell:
+                    new_cell = copy.copy(cell)
+                    continue
 
-                clean_line_w = clean_line_w + cell.width
+                if not same_style(new_cell, cell):
+                    clean_line_w = clean_line_w + new_cell.width
+                    new_body_line.append(new_cell)
+                    new_cell = copy.copy(cell)
+                    continue
+
+                new_cell.text = new_cell.text + cell.text
+                cursor = new_cell.cursor
+                self.set_font(cursor.font, cursor.style, cursor.size)
+                new_cell.width = self.get_string_width(new_cell.text)
 
             # justify line
             if memory_line.count(" ") and "<<" not in memory_line:
                 space_width = (width - clean_line_w) / memory_line.count(" ")
-                for cell in body_line:
+                for cell in new_body_line:
                     if cell.text != " ":
                         continue
 
                     cell.width = space_width
 
-            for cell in body_line:
+            new_body.append(new_body_line)
+
+        for new_body_line in new_body:
+            for cell in new_body_line:
                 cursor = cell.cursor
                 self.set_font(cursor.font, cursor.style, cursor.size)
                 self.set_text_color(*cursor.colour)
                 self.set_fill_color(*cursor.fill)
                 self.set_draw_color(*cursor.fill)
+
+                if CONFIG["black_and_white"] or not CONFIG["roles_colouring"]:
+                    self.set_fill_color(255)
+                    self.set_draw_color(255)
+
+                if CONFIG["black_and_white"]:
+                    self.set_text_color(000)
 
                 self.cell(
                     w=cell.width,
@@ -182,10 +218,11 @@ class PDF(FPDF):
 
         # reset for new role
         if previous_chars_matches([">>"], cell, memory):
+            cursor.role = ""
             roles = CONFIG["roles"].keys()
             cursor.role, dark_count = next_chars_matches(roles, cell, memory)
             cursor = set_cursor_pros(cursor, CONFIG["default"])
-            cursor.dark_count = dark_count + 1
+            cursor.dark_count = dark_count + 1 if CONFIG["dark_roles"] else 0
             cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
 
         if not cursor.is_italic and cursor.fill == [255]:

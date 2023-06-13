@@ -1,4 +1,12 @@
+import os
 from classes import Cell, Cursor
+
+
+def get_files(path):
+    files = []
+    for entry in os.scandir(path):
+        files.append(entry.name)
+    return files
 
 
 def clear_line(line: str, leave_spaces: bool = True) -> str:
@@ -122,3 +130,21 @@ def get_cursor_fill(cursor: Cursor, roles: dict) -> Cursor:
         return roles[cursor.role]["dark"]
     else:
         return roles[cursor.role]["light"]
+
+
+def same_style(new_cell: Cell, cell: Cell) -> bool:
+    new_cursor = new_cell.cursor
+    cursor = cell.cursor
+
+    if new_cursor.font != cursor.font:
+        return False
+    if new_cursor.size != cursor.size:
+        return False
+    if new_cursor.style != cursor.style:
+        return False
+    if new_cursor.colour != cursor.colour:
+        return False
+    if new_cursor.fill != cursor.fill:
+        return False
+
+    return True

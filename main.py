@@ -1,8 +1,8 @@
+from helpers import get_files
 from pdf import PDF
 from config import CONFIG
 
 
-lib_path = CONFIG["path"]
 pdf = PDF("P", "pt", "legal")
 
 # Adding the fonts
@@ -16,22 +16,22 @@ pdf.set_right_margin(CONFIG["margin_size"])
 pdf.set_auto_page_break(1, CONFIG["margin_size"] - 25)
 pdf.c_margin = 0
 
-pages_in_memory = 2
-pages = 5
-book = "First Degree"
-pdf.set_subject(book)
-pdf.set_font("Merriweather", "", 18)
-for page_index in range(1, pages + 1):
-    memory = []
-    path = f"{lib_path}{book}/page-{page_index}.txt"
-    with open(path, "rb") as fh:
-        page = fh.read().decode("latin-1")
+for book_title in get_files(CONFIG["path"]):
+    book_path = CONFIG["path"] + "/" + book_title
+    pages = get_files(book_path)
+    pdf.set_subject(book_title)
+    pdf.set_font("Merriweather", "", 18)
+    for page_index in range(1, len(pages) + 1):
+        memory = []
+        path = f"{book_path}/page-{page_index}.txt"
+        with open(path, "rb") as fh:
+            page = fh.read().decode("latin-1")
 
         # set memory for the page
         memory.append(page)
-        memory_index = page_index + 1
-        for memory_index in range(memory_index, page_index + pages_in_memory):
-            path = f"{lib_path}{book}/page-{memory_index}.txt"
+        if page_index < len(pages):
+            memory_index = page_index + 1
+            path = f"{book_path}/page-{memory_index}.txt"
             with open(path, "rb") as fh:
                 memory.append(fh.read().decode("latin-1"))
 
@@ -40,4 +40,5 @@ for page_index in range(1, pages + 1):
 
         pdf.print_page(page, memory)
 
-pdf.output("output/first.pdf", "F")
+    if pages:
+        pdf.output(f"output/{book_title}.pdf", "F")
