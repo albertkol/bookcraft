@@ -1,10 +1,9 @@
 import copy
-from fpdf import FPDF
-from config import BOLDED_LIST, CONFIG
-from classes import Cursor, Cell
 
+from fpdf import FPDF
+
+from config import CONFIG
 from helpers import (
-    clear_line,
     get_cursor_fill,
     get_previous_cursor,
     next_chars_matches,
@@ -12,28 +11,14 @@ from helpers import (
     same_style,
     set_cursor_pros,
 )
+from models import Cell, Cursor, Page
 
 
 class PDF(FPDF):
-    cursor = Cursor(
-        CONFIG["default"]["font"],
-        CONFIG["default"]["style"],
-        CONFIG["default"]["size"],
-        CONFIG["default"]["colour"],
-        CONFIG["default"]["fill"],
-    )
-
     def header(self) -> None:
-        self.set_font(
-            CONFIG["header"]["font"],
-            CONFIG["header"]["style"],
-            CONFIG["header"]["size"],
-        )
-        self.set_draw_color(*CONFIG["header"]["colour"])
-        self.set_text_color(*CONFIG["header"]["colour"])
-        self.set_fill_color(*CONFIG["header"]["fill"])
+        self._set_style("template")
         width = self.fw - self.l_margin - self.r_margin
-        height = CONFIG["header"]["height"]
+        height = CONFIG.TEXT["template"]["height"]
         page_no_width = self.get_string_width(f"{self.page_no()}")
         subject_width = self.get_string_width(self.subject)
         line_start = self.r_margin
@@ -56,239 +41,263 @@ class PDF(FPDF):
         line_end = self.fw - self.r_margin
         bottom = self.fh - 75
 
-        self.set_draw_color(*CONFIG["header"]["colour"])
+        self._set_style("template")
         self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
 
-    def print_page(self, page: list[str], memory: list[list[str]]) -> None:
+    def print_page(self, page: Page, memory: list[Page]) -> None:
         self.add_page()
-        width = self.fw - self.l_margin - self.r_margin
-        body = self._page_body(page)
-        for i in range(len(body)):
-            body_line = body[i]
-            for j in range(len(body_line)):
-                cell = body_line[j]
-                prev_cursor = get_previous_cursor(body, i, j, self.cursor)
-                cursor = self._style_cursor(cell, memory, prev_cursor)
-                cell.set_cursor(cursor)
+        # width = self.fw - self.l_margin - self.r_margin
+        # body = self._page_body(page)
+        # for i in range(len(body)):
+        #     body_line = body[i]
+        #     for j in range(len(body_line)):
+        #         cell = body_line[j]
+        #         prev_cursor = get_previous_cursor(body, i, j, self.cursor)
+        #         cursor = self._style_cursor(cell, memory, prev_cursor)
+        #         cell.set_cursor(cursor)
 
-        new_body = []
-        for i in range(len(body)):
-            body_line = body[i]
-            memory_line = memory[0][i]
+        # new_body = []
+        # for i in range(len(body)):
+        #     body_line = body[i]
+        #     memory_line = memory[0][i]
 
-            # fix italics spacing
-            clean_line_w = 0
-            new_cell = None
-            new_body_line = []
-            for cell in body_line:
-                if cell.j in [-1, 100, 101] or len(body_line) == 1:
-                    if new_cell:
-                        clean_line_w = clean_line_w + new_cell.width
-                        new_body_line.append(new_cell)
-                        new_cell = None
+        #     # fix italics spacing
+        #     clean_line_w = 0
+        #     new_cell = None
+        #     new_body_line = []
+        #     for cell in body_line:
+        #         if cell.j in [-1, 100, 101]:
+        #             if new_cell:
+        #                 clean_line_w = clean_line_w + new_cell.width
+        #                 new_body_line.append(new_cell)
+        #                 new_cell = None
 
-                    new_body_line.append(cell)
-                    continue
+        #             new_body_line.append(cell)
+        #             continue
 
-                if cell.text == " ":
-                    if new_cell:
-                        clean_line_w = clean_line_w + new_cell.width
-                        new_body_line.append(new_cell)
-                        new_cell = None
+        #         if cell.text == " ":
+        #             if new_cell:
+        #                 clean_line_w = clean_line_w + new_cell.width
+        #                 new_body_line.append(new_cell)
+        #                 new_cell = None
 
-                    new_body_line.append(cell)
-                    continue
+        #             new_body_line.append(cell)
+        #             continue
 
-                if not new_cell:
-                    new_cell = copy.copy(cell)
-                    continue
+        #         if not new_cell:
+        #             new_cell = copy.copy(cell)
+        #             continue
 
-                if not same_style(new_cell, cell):
-                    clean_line_w = clean_line_w + new_cell.width
-                    new_body_line.append(new_cell)
-                    new_cell = copy.copy(cell)
-                    continue
+        #         if not same_style(new_cell, cell):
+        #             clean_line_w = clean_line_w + new_cell.width
+        #             new_body_line.append(new_cell)
+        #             new_cell = copy.copy(cell)
+        #             continue
 
-                new_cell.text = new_cell.text + cell.text
-                cursor = new_cell.cursor
-                self.set_font(cursor.font, cursor.style, cursor.size)
-                new_cell.width = self.get_string_width(new_cell.text)
+        #         new_cell.text = new_cell.text + cell.text
+        #         cursor = new_cell.cursor
+        #         self.set_font(cursor.font, cursor.style, cursor.size)
+        #         new_cell.width = self.get_string_width(new_cell.text)
 
-            # justify line
-            if memory_line.count(" ") and "<<" not in memory_line:
-                space_width = (width - clean_line_w) / memory_line.count(" ")
-                for cell in new_body_line:
-                    if cell.text != " ":
-                        continue
+        #     # justify line
+        #     char_check = any([char in memory_line for char in ["<<", "##"]])
+        #     if memory_line.count(" ") and not char_check:
+        #         space_width = (width - clean_line_w) / memory_line.count(" ")
+        #         for cell in new_body_line:
+        #             if cell.text != " ":
+        #                 continue
 
-                    cell.width = space_width
+        #             cell.width = space_width
 
-            new_body.append(new_body_line)
+        #     new_body.append(new_body_line)
 
-        for new_body_line in new_body:
-            for cell in new_body_line:
-                cursor = cell.cursor
-                self.set_font(cursor.font, cursor.style, cursor.size)
-                self.set_text_color(*cursor.colour)
-                self.set_fill_color(*cursor.fill)
-                self.set_draw_color(*cursor.fill)
+        # for new_body_line in new_body:
+        #     for cell in new_body_line:
+        #         cursor = cell.cursor
+        #         self.set_font(cursor.font, cursor.style, cursor.size)
+        #         self.set_text_color(*cursor.colour)
+        #         self.set_fill_color(*cursor.fill)
+        #         self.set_draw_color(*cursor.fill)
 
-                if CONFIG["black_and_white"] or not CONFIG["roles_colouring"]:
-                    self.set_fill_color(255)
-                    self.set_draw_color(255)
+        #         if CONFIG["black_and_white"] or not CONFIG["roles_colouring"]:
+        #             self.set_fill_color(255)
+        #             self.set_draw_color(255)
 
-                if CONFIG["black_and_white"]:
-                    self.set_text_color(000)
+        #         if CONFIG["black_and_white"]:
+        #             self.set_text_color(000)
 
-                self.cell(
-                    w=cell.width,
-                    h=cell.height * cell.height_muliplier,
-                    txt=cell.text,
-                    ln=cell.has_br,
-                    fill=cell.has_fill,
-                )
-        else:
-            self.cursor = cell.cursor
+        #         self.cell(
+        #             w=cell.width,
+        #             h=cell.height * cell.height_muliplier,
+        #             txt=cell.text,
+        #             ln=cell.has_br,
+        #             fill=cell.has_fill,
+        #         )
+        # else:
+        #     self.cursor = cell.cursor
 
-    def _page_body(self, lines: list[str]) -> list[list[Cell]]:
-        body = []
-        width = self.fw - self.l_margin - self.r_margin
-        d_height = CONFIG["default"]["height"]
-        t_height = CONFIG["title"]["height"]
-        th_multip = CONFIG["title"]["height_muliplier"]
-        for i in range(len(lines)):
-            body_line = []
-            line = lines[i]
+    # def _page_body(self, lines: list[str]) -> list[list[Cell]]:
+    #     body = []
+    #     width = self.fw - self.l_margin - self.r_margin
+    #     d_height = CONFIG["default"]["height"]
+    #     t_height = CONFIG["title"]["height"]
+    #     th_multip = CONFIG["title"]["height_muliplier"]
 
-            try:
-                next_line = lines[i + 1]
-            except IndexError:
-                next_line = None
+    #     for i in range(len(lines)):
+    #         body_line = []
+    #         line = lines[i]
 
-            if "##" in line:
-                # add line high before heading if not 1st line on the page
-                if i > 0:
-                    cell = Cell(i, -1, "", 0, t_height, th_multip, True, False)
-                    body_line.append(cell)
+    #         # add line high before heading if not 1st line on the page
+    #         if "##" in line and i > 0:
+    #             cell = Cell(i, -1, "", 0, t_height, th_multip, True, False)
+    #             body_line.append(cell)
 
-                clean_line = clear_line(line)
-                cell = Cell(i, 0, clean_line, width, t_height, th_multip, True)
-                body_line.append(cell)
+    #         for j in range(len(line)):
+    #             # skip special chars
+    #             if line[j] in [">", "<", "_", "#"]:
+    #                 continue
 
-                # add line high after heading
-                if "##" not in next_line:
-                    cell = Cell(i, 101, "", width, t_height, th_multip, True)
-                    body_line.append(cell)
+    #             # add rest of char
+    #             char_w = self.get_string_width(line[j])
+    #             cell = Cell(i, j, line[j], char_w, d_height, has_fill=True)
+    #             body_line.append(cell)
 
-                body.append(body_line)
-                continue
+    #         # break line at the end
+    #         cell = Cell(i, 100, "", 0, d_height, has_br=True)
+    #         body_line.append(cell)
 
-            for j in range(len(line)):
-                # skip special chars
-                if line[j] in [">", "<", "_", "#"]:
-                    continue
+    #         if "##" in line:
+    #             try:
+    #                 next_line = lines[i + 1]
+    #             except IndexError:
+    #                 next_line = None
 
-                # add rest of char
-                char_w = self.get_string_width(line[j])
-                cell = Cell(i, j, line[j], char_w, d_height, has_fill=True)
-                body_line.append(cell)
+    #             # add line high after heading
+    #             if "##" not in next_line:
+    #                 cell = Cell(i, 101, "", width, t_height, th_multip, True)
+    #                 body_line.append(cell)
 
-            # break line at the end
-            cell = Cell(i, 100, "", 0, d_height, has_br=True)
-            body_line.append(cell)
+    #         body.append(body_line)
 
-            body.append(body_line)
+    #         cell_array = []
 
-        return body
+    #         rules = [
+    #             CellCreationRule(
+    #                 CharEqualsSpecification("#"),
+    #                 CreateMultipleCellsAction("#", 3),
+    #             ),
+    #             CellCreationRule(CharEqualsSpecification("_"), None),
+    #         ]
 
-    def _style_cursor(
-        self,
-        cell: Cell,
-        memory: list[list[str]],
-        previous_cursor: Cursor,
-    ) -> Cursor:
-        cursor = copy.copy(previous_cursor)
+    #         for string in strings:
+    #             for char in string:
+    #                 for rule in rules:
+    #                     if rule.specification.is_satisfied(char):
+    #                         action = rule.action
+    #                         if action is not None:
+    #                             cells = action.perform_action(char)
+    #                             cell_array.extend(cells)
+    #                         break
+    #                 else:
+    #                     cell_array.append(Cell(char))
 
-        if cell.j in [-1, 100, 101]:
-            return cursor
+    #         return cell_array
+    #     return body
 
-        # add header styling
-        if "##" in memory[0][cell.i]:
-            return set_cursor_pros(cursor, CONFIG["title"])
+    # def _style_cursor(
+    #     self,
+    #     cell: Cell,
+    #     memory: list[list[str]],
+    #     previous_cursor: Cursor,
+    # ) -> Cursor:
+    #     cursor = copy.copy(previous_cursor)
 
-        # reset for new role
-        if previous_chars_matches([">>"], cell, memory):
-            cursor.role = ""
-            roles = CONFIG["roles"].keys()
-            cursor.role, dark_count = next_chars_matches(roles, cell, memory)
-            cursor = set_cursor_pros(cursor, CONFIG["default"])
-            cursor.dark_count = dark_count + 1 if CONFIG["dark_roles"] else 0
-            cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
+    #     if cell.j in [-1, 100, 101]:
+    #         return cursor
 
-        if not cursor.is_italic and cursor.fill == [255]:
-            cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
+    #     # add header styling
+    #     if "##" in memory[0][cell.i]:
+    #         return set_cursor_pros(cursor, CONFIG["title"])
 
-        # Check for `(` and `)`
-        if cell.text in ["(", ")"]:
-            cursor = set_cursor_pros(cursor, CONFIG["bold"])
-            cursor.bold_count = 1
+    #     # reset for new role
+    #     if previous_chars_matches([">>"], cell, memory):
+    #         cursor.role = ""
+    #         roles = CONFIG["roles"].keys()
+    #         cursor.role, dark_count = next_chars_matches(roles, cell, memory)
+    #         cursor = set_cursor_pros(cursor, CONFIG["default"])
+    #         cursor.dark_count = dark_count + 1 if CONFIG["dark_roles"] else 0
+    #         cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
 
-            return cursor
+    #     if not cursor.is_italic and cursor.fill == [255]:
+    #         cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
 
-        # check bold counter and reset if necessary
-        if cursor.bold_count != 0:
-            cursor.bold_count = cursor.bold_count - 1
-            if cursor.bold_count == 0:
-                cursor.is_bold = False
-                if cursor.is_italic:
-                    cursor = set_cursor_pros(cursor, CONFIG["italic"])
-                else:
-                    cursor = set_cursor_pros(cursor, CONFIG["default"])
-                    cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
+    #     # Check for `(` and `)`
+    #     if cell.text in ["(", ")"]:
+    #         cursor = set_cursor_pros(cursor, CONFIG["bold"])
+    #         cursor.bold_count = 1
 
-        # check italic counter and reset if necessary
-        if cursor.italic_count != 0:
-            cursor.italic_count = cursor.italic_count - 1
-            if cursor.italic_count == 0:
-                cursor.is_italic = False
-                if cursor.is_bold:
-                    cursor = set_cursor_pros(cursor, CONFIG["bold"])
-                else:
-                    cursor = set_cursor_pros(cursor, CONFIG["default"])
-                cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
+    #         return cursor
 
-        # Check for italic end
-        if cursor.is_italic:
-            match, _ = next_chars_matches(["__", ")"], cell, memory, False)
-            if match:
-                cursor.italic_count = 1
+    #     # check bold counter and reset if necessary
+    #     if cursor.bold_count != 0:
+    #         cursor.bold_count = cursor.bold_count - 1
+    #         if cursor.bold_count == 0:
+    #             cursor.is_bold = False
+    #             if cursor.is_italic:
+    #                 cursor = set_cursor_pros(cursor, CONFIG["italic"])
+    #             else:
+    #                 cursor = set_cursor_pros(cursor, CONFIG["default"])
+    #                 cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
 
-        # Check for italic start
-        if not cursor.is_italic:
-            if previous_chars_matches(["__", "("], cell, memory):
-                cursor = set_cursor_pros(cursor, CONFIG["italic"])
-                cursor.is_italic = True
-                cursor.italic_count = -1
+    #     # check italic counter and reset if necessary
+    #     if cursor.italic_count != 0:
+    #         cursor.italic_count = cursor.italic_count - 1
+    #         if cursor.italic_count == 0:
+    #             cursor.is_italic = False
+    #             if cursor.is_bold:
+    #                 cursor = set_cursor_pros(cursor, CONFIG["bold"])
+    #             else:
+    #                 cursor = set_cursor_pros(cursor, CONFIG["default"])
+    #             cursor.fill = get_cursor_fill(cursor, CONFIG["roles"])
 
-        # Bold words
-        if not cursor.is_bold:
-            match, bold_count = next_chars_matches(BOLDED_LIST, cell, memory)
-            if match:
-                cursor.style = CONFIG["bold"]["style"]
-                cursor.bold_count = bold_count
+    #     # Check for italic end
+    #     if cursor.is_italic:
+    #         match, _ = next_chars_matches(["__", ")"], cell, memory, False)
+    #         if match:
+    #             cursor.italic_count = 1
 
-        if not cursor.is_italic:
-            if previous_chars_matches(["__", ")"], cell, memory):
-                cursor.fill = [255]
+    #     # Check for italic start
+    #     if not cursor.is_italic:
+    #         if previous_chars_matches(["__", "("], cell, memory):
+    #             cursor = set_cursor_pros(cursor, CONFIG["italic"])
+    #             cursor.is_italic = True
+    #             cursor.italic_count = -1
 
-            matches, _ = next_chars_matches(["__", "("], cell, memory, False)
-            if matches:
-                cursor.fill = [255]
+    #     # Bold words
+    #     if not cursor.is_bold:
+    #         match, bold_count = next_chars_matches(BOLDED_LIST, cell, memory)
+    #         if match:
+    #             cursor.style = CONFIG["bold"]["style"]
+    #             cursor.bold_count = bold_count
 
-        # check dark counter
-        if cursor.dark_count != 0:
-            cursor.dark_count = cursor.dark_count - 1
-            if cursor.dark_count == 0:
-                cursor.fill = [255]
+    #     if not cursor.is_italic:
+    #         if previous_chars_matches(["__", ")"], cell, memory):
+    #             cursor.fill = [255]
 
-        return cursor
+    #         matches, _ = next_chars_matches(["__", "("], cell, memory, False)
+    #         if matches:
+    #             cursor.fill = [255]
+
+    #     # check dark counter
+    #     if cursor.dark_count != 0:
+    #         cursor.dark_count = cursor.dark_count - 1
+    #         if cursor.dark_count == 0:
+    #             cursor.fill = [255]
+
+    #     return cursor
+
+    def _set_style(self, style_name: str) -> None:
+        self.set_font(*list(CONFIG.TEXT[style_name]["cursor"].values())[:3])
+        self.set_draw_color(*CONFIG.TEXT[style_name]["cursor"]["colour"])
+        self.set_text_color(*CONFIG.TEXT[style_name]["cursor"]["colour"])
+        self.set_fill_color(*CONFIG.TEXT[style_name]["cursor"]["fill"])

@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "bookcraft"
+version = "0.1.0"
+description = ""
+authors = ["Albert Kolozsvari <albertartk@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+reportlab = "4.0.4"
+fpdf = "1.7.2"
+PyYAML = "6.0"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "6.0.0"
+black = "23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,168 +1,70 @@
-BOLDED_LIST = [
-    "W. M.",
-    "S. W.",
-    "J. W.",
-    "S. D.",
-    "J. D.",
-    "I. G.",
-    "A. D. C.",
-    "I. P. M.",
-    "Can.",
-    "S.-W.",
-    "E. A. F.",
-    "E. A.",
-    "Mr A. B.",
-    "Bro. A. B.",
-    "Bro. A.",
-    "Bro. B.",
-    "Bro. C.",
-    "Bro. D.",
-    "Bro.",
-    "Chaplain:",
-    "Brethren:",
-    "Tyler",
-    "----",
-    "k....s",
-    "l. o. t. t.",
-    "d. i. s. a.",
-    "a. r. t. t. s.",
-    "h. t. c. a.",
-    "d. p. w. t. t. o. t. f. k. j. o. a. b. r. h.",
-    "Ds.",
-    "Ws.",
-    "N.-W.",
-    "N.",
-    "S.",
-    "J.",
-]
+from dataclasses import dataclass
 
-CONFIG = {
-    "path": "./books/",
-    "default": {
-        "font": "Merriweather",
-        "size": 18,
-        "style": "",
-        "colour": [000],
-        "fill": [255],
-        "height": 18 + 4.2,
-        "height_muliplier": 1,
-    },
-    "bold": {
-        "font": "Merriweather Light",
-        "size": 18,
-        "style": "B",
-        "colour": [000],
-        "fill": [255],
-        "height": 18 + 4.2,
-        "height_muliplier": 1,
-    },
-    "italic": {
-        "font": "Merriweather Light",
-        "size": 18,
-        "style": "I",
-        "colour": [215, 0, 0],
-        # "colour": [100, 100, 100],
-        "fill": [255],
-        "height": 18 + 4.2,
-        "height_muliplier": 1,
-    },
-    "title": {
-        "font": "Montserrat",
-        "size": 18,
-        "style": "",
-        "colour": [000],
-        "fill": [255],
-        "height": 18 + 4.2,
-        "height_muliplier": 0.75,
-    },
-    "header": {
-        "font": "Montserrat",
-        "size": 13,
-        "style": "",
-        "colour": [000],
-        "fill": [255],
-        "height": 13 + 2.5,
-        "height_muliplier": 1,
-    },
-    "black_and_white": False,
-    "roles_colouring": True,
-    "dark_roles": True,
-    "roles": {
-        "W. M.": {
-            "dark": [255],
-            "light": [255],
-        },
-        "S. W.": {
-            "dark": [108, 158, 235],
-            "light": [164, 194, 244],
-        },
-        "J. W.": {
-            "dark": [147, 196, 125],
-            "light": [182, 215, 168],
-        },
-        "S. D.": {
-            "dark": [246, 178, 107],
-            "light": [249, 203, 156],
-        },
-        "J. D.": {
-            "dark": [142, 124, 195],
-            "light": [180, 167, 214],
-        },
-        "I. G.": {
-            "dark": [118, 165, 175],
-            "light": [162, 192, 201],
-        },
-        "Can.": {
-            "dark": [255, 217, 102],
-            "light": [255, 229, 153],
-        },
-    },
-    "margin_size": 28.35 * 4,
-    "fonts": [
-        {
-            "name": "Merriweather",
-            "style": "",
-            "path": "fonts/Merriweather/Merriweather-Regular.ttf",
-        },
-        {
-            "name": "Merriweather",
-            "style": "I",
-            "path": "fonts/Merriweather/Merriweather-Italic.ttf",
-        },
-        {
-            "name": "Merriweather",
-            "style": "B",
-            "path": "fonts/Merriweather/Merriweather-Bold.ttf",
-        },
-        {
-            "name": "Merriweather",
-            "style": "BI",
-            "path": "fonts/Merriweather/Merriweather-BoldItalic.ttf",
-        },
-        {
-            "name": "Merriweather Light",
-            "style": "",
-            "path": "fonts/Merriweather/Merriweather-Light.ttf",
-        },
-        {
-            "name": "Merriweather Light",
-            "style": "B",
-            "path": "fonts/Merriweather/Merriweather-Black.ttf",
-        },
-        {
-            "name": "Merriweather Light",
-            "style": "IB",
-            "path": "fonts/Merriweather/Merriweather-BlackItalic.ttf",
-        },
-        {
-            "name": "Merriweather Light",
-            "style": "I",
-            "path": "fonts/Merriweather/Merriweather-LightItalic.ttf",
-        },
-        {
-            "name": "Montserrat",
-            "style": "",
-            "path": "fonts/Montserrat/static/Montserrat-Light.ttf",
-        },
-    ],
-}
+import yaml
+
+from models import Cell, Cursor
+
+with open("fonts.yaml", "r") as file:
+    FONTS = yaml.safe_load(file).get("fonts")
+
+with open("settings.yaml", "r") as file:
+    SETTINGS = yaml.safe_load(file)
+
+with open("keywords.yaml", "r") as file:
+    KEYWORDS = yaml.safe_load(file).get("keywords")
+
+
+@dataclass
+class Config:
+    BOOKS_PATH = "./books/"
+    FONTS: dict
+    SETTINGS: dict
+    KEYWORDS: dict
+
+    def __init__(self, fonts: dict, settings: dict, keywords: dict):
+        self.FONTS = fonts
+        self.SETTINGS = settings
+        self.KEYWORDS = keywords
+
+    @property
+    def PAGE(self) -> dict:
+        return self.SETTINGS.get("page")
+
+    @property
+    def COLOUR(self) -> dict:
+        return self.SETTINGS.get("colour")
+
+    @property
+    def ROLES(self) -> dict:
+        return self.SETTINGS.get("roles")
+
+    @property
+    def TEXT(self) -> dict:
+        return self.SETTINGS.get("text")
+
+    @property
+    def DEFAULT_CELL(self) -> dict:
+        return Cell(
+            width=0,
+            height=int(self.TEXT["default"]["height"]),
+            cursor=Cursor(**self.TEXT["default"]["cursor"]),
+        )
+
+    @property
+    def DEFAULT_FONT(self) -> dict:
+        return {
+            "family": self.TEXT["default"]["cursor"]["family"],
+            "style": self.TEXT["default"]["cursor"]["style"],
+            "size": self.TEXT["default"]["cursor"]["size"],
+        }
+
+    @property
+    def TEMPLATE_FONT(self) -> dict:
+        return {
+            "family": self.TEXT["template"]["cursor"]["family"],
+            "style": self.TEXT["template"]["cursor"]["style"],
+            "size": self.TEXT["template"]["cursor"]["size"],
+        }
+
+
+CONFIG = Config(fonts=FONTS, settings=SETTINGS, keywords=KEYWORDS)

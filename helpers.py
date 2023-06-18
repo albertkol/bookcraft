@@ -1,5 +1,7 @@
 import os
-from classes import Cell, Cursor
+from typing import Optional
+
+from models import Cell, Cursor, Page
 
 
 def get_files(path):
@@ -7,6 +9,23 @@ def get_files(path):
     for entry in os.scandir(path):
         files.append(entry.name)
     return files
+
+
+def get_page(books_path: str, page_index: int) -> Optional[Page]:
+    path = f"{books_path}/page-{page_index}.txt"
+    try:
+        with open(path, "rb") as fh:
+            return fh.read().decode("latin-1").split("\n")
+    except FileNotFoundError:
+        pass
+
+
+def get_pages(path: str, index: int, how_many: int = 1) -> list[Page] | Page:
+    pages = []
+    for index in range(index, index + how_many):
+        pages.append(get_page(path, index))
+
+    return pages if len(pages) > 1 else pages[0]
 
 
 def clear_line(line: str, leave_spaces: bool = True) -> str:
@@ -25,14 +44,27 @@ def previous_chars_matches(
     cell: Cell,
     memory: list[list[str]],
 ) -> bool:
+    i = cell.i
     j = cell.j
     match = None
     memory_line = memory[0][cell.i]
     for char in chars:
         start = j - len(char)
+        end = j
+        # do we have to look at next line
+        if start < 0:
+            try:
+                # we have to look at next line too
+                memory_line = f"{memory[0][i-1]} {memory[0][i]}"
+                new_j = len(memory[0][i - 1])
+                start = new_j - len(char)
+                end = new_j
+            except IndexError:
+                # we hit the end of the page
+                continue
 
         try:
-            match = char if char == memory_line[start:j] else None
+            match = char if char == memory_line[start:end] else None
         except IndexError:
             continue
 

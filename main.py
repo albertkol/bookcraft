@@ -1,44 +1,30 @@
-from helpers import get_files
-from pdf import PDF
 from config import CONFIG
+from helpers import get_files, get_pages
+from pdf import PDF
 
-
-pdf = PDF("P", "pt", "legal")
+pdf = PDF(unit="pt", format="Legal")
 
 # Adding the fonts
-for font in CONFIG["fonts"]:
-    pdf.add_font(font["name"], font["style"], font["path"], True)
+[pdf.add_font(**font, uni=True) for font in CONFIG.FONTS]
 
 # Set margins
 pdf.set_top_margin(0)
-pdf.set_left_margin(CONFIG["margin_size"])
-pdf.set_right_margin(CONFIG["margin_size"])
-pdf.set_auto_page_break(1, CONFIG["margin_size"] - 25)
+pdf.set_left_margin(CONFIG.PAGE["margin_size"])
+pdf.set_right_margin(CONFIG.PAGE["margin_size"])
+pdf.set_auto_page_break(True, CONFIG.PAGE["bottom_margin"])
 pdf.c_margin = 0
 
-for book_title in get_files(CONFIG["path"]):
-    book_path = CONFIG["path"] + "/" + book_title
-    pages = get_files(book_path)
+# books = [p for p in get_files("./books/") if p != "Test"]
+books = ["Test"]
+for book_title in books:
+    books_path = CONFIG.BOOKS_PATH + book_title
+    pages = get_files(books_path)
     pdf.set_subject(book_title)
-    pdf.set_font("Merriweather", "", 18)
+    pdf.set_font(**CONFIG.DEFAULT_FONT)
     for page_index in range(1, len(pages) + 1):
-        memory = []
-        path = f"{book_path}/page-{page_index}.txt"
-        with open(path, "rb") as fh:
-            page = fh.read().decode("latin-1")
+        page = get_pages(books_path, page_index)
+        memory = get_pages(books_path, page_index, 2)
 
-        # set memory for the page
-        memory.append(page)
-        if page_index < len(pages):
-            memory_index = page_index + 1
-            path = f"{book_path}/page-{memory_index}.txt"
-            with open(path, "rb") as fh:
-                memory.append(fh.read().decode("latin-1"))
+        pdf.print_page(page=page, memory=memory)
 
-        memory = [memory_page.split("\n") for memory_page in memory]
-        page = page.split("\n")
-
-        pdf.print_page(page, memory)
-
-    if pages:
-        pdf.output(f"output/{book_title}.pdf", "F")
+    pdf.output(f"output/{book_title}.pdf", "F")

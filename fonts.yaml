@@ -1,0 +1,28 @@
+fonts:
+  - family: Merriweather
+    style: ""
+    fname: fonts/Merriweather/Merriweather-Regular.ttf
+  - family: Merriweather
+    style: I
+    fname: fonts/Merriweather/Merriweather-Italic.ttf
+  - family: Merriweather
+    style: B
+    fname: fonts/Merriweather/Merriweather-Bold.ttf
+  - family: Merriweather
+    style: BI
+    fname: fonts/Merriweather/Merriweather-BoldItalic.ttf
+  - family: Merriweather Light
+    style: ""
+    fname: fonts/Merriweather/Merriweather-Light.ttf
+  - family: Merriweather Light
+    style: I
+    fname: fonts/Merriweather/Merriweather-LightItalic.ttf
+  - family: Merriweather Black
+    style: ""
+    fname: fonts/Merriweather/Merriweather-Black.ttf
+  - family: Merriweather Black
+    style: IB
+    fname: fonts/Merriweather/Merriweather-BlackItalic.ttf
+  - family: Montserrat Light
+    style: ""
+    fname: fonts/Montserrat/static/Montserrat-Light.ttf

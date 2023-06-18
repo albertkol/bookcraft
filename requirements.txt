@@ -1,5 +1,0 @@
-reportlab==4.0.4
-fpdf==1.7.2
-
-flake8==6.0.0
-black==23.3.0 
