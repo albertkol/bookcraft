@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional, TypeAlias
 
+from classes.config import Config
+
 RGBColour: TypeAlias = tuple[int, int, int]
 Page: TypeAlias = list[list[str]]
 
@@ -23,14 +25,21 @@ class FontStyle(Enum):
     ITALICBOLD = "IB"
 
 
-class Reason(Enum):
-    TITLE_RULE = auto()
-    ROLE_RULE = auto()
-    ROLE_HIGHLIGHT_RULE = auto()
-    PARENTHESES_RULE = auto()
-    INSIDE_PARENTHESES_RULE = auto()
-    INSIDE_UNDERSCORE_RULE = auto()
-    KEYWORD_RULE = auto()
+class RuleType(Enum):
+    TITLE = auto()
+    DEFAULT = auto()
+    ROLE = auto()
+    ROLE_HIGHLIGHT = auto()
+    PARENTHESES = auto()
+    ITALIC_START = auto()
+    ITALIC_END = auto()
+    KEYWORD = auto()
+    BLANK_SPACE = auto()
+
+
+class ItalicType(Enum):
+    START = "start"
+    END = "end"
 
 
 @dataclass
@@ -40,14 +49,15 @@ class Cursor:
     size: Optional[int] = None
     colour: Optional[RGBColour] = None
     fill: Optional[RGBColour] = None
+    is_italic: bool = False
+    is_bold: bool = False
 
 
 @dataclass
 class CursorModifier:
-    reason: Reason
+    rule: RuleType
     cursor: Cursor
     counter: int
-    priority: int
 
 
 @dataclass
@@ -60,5 +70,11 @@ class Cell:
     has_fill: bool = False
     cursor: Optional[Cursor] = None
 
-    def set_cursor(self, cursor: Cursor):
-        self.cursor = cursor
+
+@dataclass
+class Context:
+    i: int
+    j: int
+    memory: list[Page]
+    config: Config
+    cursor: Cursor

@@ -1,30 +1,24 @@
-from config import CONFIG
-from helpers import get_files, get_pages
-from pdf import PDF
+from classes.book import Book
+from classes.cell.CellFactory import CellFactory
+from classes.config import CONFIG
+from classes.cursor.CursorModifierFactory import CursorModifierFactory
+from classes.cursor.CursorModifierProcessor import CursorModifierProcessor
+from classes.cursor.CursorModifierReducer import CursorModifierReducer
+from classes.helpers import get_files
 
-pdf = PDF(unit="pt", format="Legal")
+# books = ["Test"]
+books = [p for p in get_files(CONFIG.BOOKS_PATH) if p != "Test"]
 
-# Adding the fonts
-[pdf.add_font(**font, uni=True) for font in CONFIG.FONTS]
-
-# Set margins
-pdf.set_top_margin(0)
-pdf.set_left_margin(CONFIG.PAGE["margin_size"])
-pdf.set_right_margin(CONFIG.PAGE["margin_size"])
-pdf.set_auto_page_break(True, CONFIG.PAGE["bottom_margin"])
-pdf.c_margin = 0
-
-# books = [p for p in get_files("./books/") if p != "Test"]
-books = ["Test"]
+book = Book().set_title("Craft")
 for book_title in books:
-    books_path = CONFIG.BOOKS_PATH + book_title
-    pages = get_files(books_path)
-    pdf.set_subject(book_title)
-    pdf.set_font(**CONFIG.DEFAULT_FONT)
-    for page_index in range(1, len(pages) + 1):
-        page = get_pages(books_path, page_index)
-        memory = get_pages(books_path, page_index, 2)
+    book.set_path(CONFIG.BOOKS_PATH + book_title)
+    book.set_book_font(CONFIG.FONTS)
+    book.set_margin(CONFIG.PAGE)
+    book.set_subject(book_title)
+    book.set_cm_reducer(CursorModifierReducer())
+    book.set_cm_processor(CursorModifierProcessor())
+    book.set_cm_factory(CursorModifierFactory())
+    book.set_cell_factory(CellFactory())
+    book.set_pages(get_files(CONFIG.BOOKS_PATH + book_title))
 
-        pdf.print_page(page=page, memory=memory)
-
-    pdf.output(f"output/{book_title}.pdf", "F")
+book.build()

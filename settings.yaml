@@ -15,11 +15,11 @@ text:
   bold:
     height: 23
     cursor:
-      family: Merriweather Light
+      family: Merriweather
       style: "B"
       size: 18
-      colour: [215, 0, 0]
-      fill: [255, 255, 255]
+      colour: null
+      fill: null
   italic:
     height: 23
     cursor:
@@ -29,13 +29,15 @@ text:
       colour: [215, 0, 0]
       fill: [255, 255, 255]
   heading:
-    height: 17.25
+    height: 23
     cursor:
       family: Montserrat Light
       style: ""
       size: 18
       colour: [0, 0, 0]
       fill: [255, 255, 255]
+  heading_spacing:
+    height: 9
   template:
     height: 13.5
     cursor:
