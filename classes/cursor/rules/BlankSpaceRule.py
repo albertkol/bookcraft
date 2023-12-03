@@ -8,7 +8,7 @@ class BlankSpaceRule(CursorRule):
         page = context.memory[0]
         line = page[context.i]
         index = context.j
-        while index < len(line) - 1 and line[index] in [" ", ",", ".", ":"]:
+        while index <= len(line) - 1 and line[index] in [" ", ",", ".", ":"]:
             counter += 1
             index += 1
 

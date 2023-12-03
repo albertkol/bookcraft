@@ -4,6 +4,7 @@ from classes.cursor.rules.BlankSpaceRule import BlankSpaceRule
 from classes.cursor.rules.DarkenRoleRule import DarkenRoleRule
 from classes.cursor.rules.DefaultRule import DefaultRule
 from classes.cursor.rules.HeaderRule import HeaderRule
+from classes.cursor.rules.HyphenRule import HyphenRule
 from classes.cursor.rules.ItalicRule import ItalicRule
 from classes.cursor.rules.KeywordRule import KeywordRule
 from classes.cursor.rules.ParenthesisRule import ParenthesisRule
@@ -71,6 +72,14 @@ class CursorModifierFactory:
         CursorSpecificationRule(
             NotSpecification(LineHasCharSpecification(["#"], 0)),
             KeywordRule(),
+        ),
+        CursorSpecificationRule(
+            IsCharEqualSpecification(["-"]),
+            HyphenRule(),
+        ),
+        CursorSpecificationRule(
+            IsCharEqualSpecification(["%"]),
+            DefaultRule(),
         ),
     )
 

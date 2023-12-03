@@ -26,3 +26,6 @@ fonts:
   - family: Montserrat Light
     style: ""
     fname: fonts/Montserrat/static/Montserrat-Light.ttf
+  - family: Montserrat Light
+    style: "I"
+    fname: fonts/Montserrat/static/Montserrat-Light.ttf
