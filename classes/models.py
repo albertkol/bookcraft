@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Optional, TypeAlias
+from typing import Optional
+
+from typing_extensions import TypeAlias
 
 from classes.config import Config
 
