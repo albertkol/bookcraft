@@ -1,5 +1,4 @@
 import os
-from typing import Optional
 
 from classes.models import Page
 
@@ -11,7 +10,7 @@ def get_files(path):
     return files
 
 
-def get_page(books_path: str, page_index: int) -> Optional[Page]:
+def get_page(books_path: str, page_index: int):
     path = f"{books_path}/page-{page_index}.txt"
     try:
         with open(path, "rb") as fh:
@@ -20,7 +19,7 @@ def get_page(books_path: str, page_index: int) -> Optional[Page]:
         pass
 
 
-def get_pages(path: str, index: int, how_many: int = 1) -> list[Page] | Page:
+def get_pages(path: str, index: int, how_many: int = 1):
     pages = []
     for index in range(index, index + how_many):
         page = get_page(path, index)
@@ -50,7 +49,7 @@ def previous_chars_matches(
         if start < 0:
             try:
                 # we have to look at next line too
-                memory_line = f"{memory[0][i-1]} {memory[0][i]}"
+                memory_line = f"{memory[0][i - 1]} {memory[0][i]}"
                 new_j = len(memory[0][i - 1])
                 start = new_j - len(char)
                 end = new_j
@@ -88,7 +87,7 @@ def next_chars_matches(
             breaks_line = True
             try:
                 # we have to look at next line too
-                memory_line = f"{memory[0][i]} {memory[0][i+1]}"
+                memory_line = f"{memory[0][i]} {memory[0][i + 1]}"
             except IndexError:
                 try:
                     # we have to look at next page 1st line too

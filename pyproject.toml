@@ -6,10 +6,11 @@ authors = ["Albert Kolozsvari <albertartk@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9.0"
 reportlab = "4.0.4"
 fpdf = "1.7.2"
 PyYAML = "6.0"
+urllib3 = "<2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "6.0.0"
