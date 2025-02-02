@@ -13,7 +13,7 @@ from classes.models import Cell, Context, CursorModifier, Page
 
 class Book(FPDF):
     def __init__(self) -> Book:
-        super().__init__(unit="pt", format="Legal")
+        super().__init__(unit="pt", format=(475, 925))
 
     def header(self) -> None:
         self.set_font(**CONFIG.TEMPLATE_FONT)
@@ -26,22 +26,22 @@ class Book(FPDF):
         line_start = self.r_margin
         line_end = self.fw - self.r_margin
 
-        self.cell(width, height, "", 0, 1)
-        self.cell(width, height, "", 0, 1)
-        self.cell(width, height, "", 0, 1)
-        self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
-        self.cell(width, height, "", 0, 1)
+        # self.cell(width, height, "", 0, 1)
+        # self.cell(width, height, "", 0, 1)
+        # self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
+        # self.cell(width, height, "", 0, 1)
         self.cell(page_no_width, height, f"{self.page_no()}")
         self.cell(width - page_no_width - subject_width, height, "", 0)
         self.cell(subject_width, height, self.subject, 0, 1)
         self.cell(width, height, "", 0, 1)
         self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
+        # self.cell(width, height, "", 0, 1)
         self.cell(width, height, "", 0, 1)
 
     def footer(self) -> None:
         line_start = self.r_margin
         line_end = self.fw - self.r_margin
-        bottom = self.fh - 75
+        bottom = self.fh - 35
 
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
@@ -59,7 +59,7 @@ class Book(FPDF):
         return self
 
     def set_margin(self, page: dict) -> Book:
-        self.set_top_margin(0)
+        self.set_top_margin(page["top_margin"])
         self.set_left_margin(page["margin_size"])
         self.set_right_margin(page["margin_size"])
         self.set_auto_page_break(True, page["bottom_margin"])

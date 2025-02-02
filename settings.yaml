@@ -69,5 +69,6 @@ roles:
     dark: [255, 217, 102]
     light: [255, 229, 153]
 page:
-  margin_size: 113.4
-  bottom_margin: 88.4
+  top_margin: 28.4
+  margin_size: 38.4
+  bottom_margin: 38.4

@@ -7,7 +7,8 @@ from classes.cursor.CursorModifierReducer import CursorModifierReducer
 from classes.helpers import get_files
 
 # books = ["Test"]
-books = [p for p in get_files(CONFIG.BOOKS_PATH) if p != "Test"]
+# books = [p for p in get_files(CONFIG.BOOKS_PATH) if p != "Test"]
+books = ["First Degree", "Second Degree", "Third Degree"]
 
 book = Book().set_title("Craft-Mobile")
 for book_title in books:
