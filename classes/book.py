@@ -19,12 +19,12 @@ class Book(FPDF):
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
         self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
-        width = self.fw - self.l_margin - self.r_margin
+        width = self.w - self.l_margin - self.r_margin
         height = CONFIG.TEMPLATE_HEIGHT
         page_no_width = self.get_string_width(f"{self.page_no()}")
         subject_width = self.get_string_width(self.subject)
         line_start = self.r_margin
-        line_end = self.fw - self.r_margin
+        line_end = self.w - self.r_margin
 
         # self.cell(width, height, "", 0, 1)
         # self.cell(width, height, "", 0, 1)
@@ -40,8 +40,8 @@ class Book(FPDF):
 
     def footer(self) -> None:
         line_start = self.r_margin
-        line_end = self.fw - self.r_margin
-        bottom = self.fh - 35
+        line_end = self.w - self.r_margin
+        bottom = self.h - 35
 
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
@@ -108,7 +108,7 @@ class Book(FPDF):
         return self
 
     def build(self) -> None:
-        self.output(f"output/{self.title}.pdf", "F")
+        self.output(f"output/{self.title}.pdf")
 
     def _print_page(self, memory: list[Page]) -> list[CursorModifier]:
         self.add_page()
@@ -158,10 +158,8 @@ class Book(FPDF):
                 fill=cell.has_fill,
             )
 
-    def _justify_line(
-        self, cells: list[Cell], memory_line: list[str]
-    ) -> list[Cell]:
-        width = self.fw - self.l_margin - self.r_margin
+    def _justify_line(self, cells: list[Cell], memory_line: list[str]) -> list[Cell]:
+        width = self.w - self.l_margin - self.r_margin
         clean_line_w = 0
         for cell in cells:
             cursor = cell.cursor

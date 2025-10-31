@@ -6,11 +6,11 @@ from classes.cursor.CursorModifierProcessor import CursorModifierProcessor
 from classes.cursor.CursorModifierReducer import CursorModifierReducer
 from classes.helpers import get_files
 
-# books = ["Test"]
 # books = [p for p in get_files(CONFIG.BOOKS_PATH) if p != "Test"]
 books = ["First Degree", "Second Degree", "Third Degree"]
+books = ["Royal Arch"]
 
-book = Book().set_title("Craft-Mobile")
+book = Book().set_title("Royal Arch")
 for book_title in books:
     book.set_path(CONFIG.BOOKS_PATH + book_title)
     book.set_book_font(CONFIG.FONTS)
