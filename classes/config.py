@@ -2,13 +2,15 @@ from dataclasses import dataclass
 
 import yaml
 
+SWITCH = "c-"
+
 with open("fonts.yaml", "r") as file:
     FONTS = yaml.safe_load(file).get("fonts")
 
-with open("settings.yaml", "r") as file:
+with open(SWITCH + "settings.yaml", "r") as file:
     SETTINGS = yaml.safe_load(file)
 
-with open("keywords.yaml", "r") as file:
+with open(SWITCH + "keywords.yaml", "r") as file:
     KEYWORDS = yaml.safe_load(file).get("keywords")
 
 

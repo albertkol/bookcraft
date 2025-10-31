@@ -4,3 +4,4 @@
 __pycache__
 books/
 output/
+.DS_Store

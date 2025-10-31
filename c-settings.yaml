@@ -1,3 +1,9 @@
+title:
+  text: "Craft"
+books:
+  - "First Degree"
+  - "Second Degree"
+  - "Third Degree"
 colour:
   enabled: false
   italic: true
