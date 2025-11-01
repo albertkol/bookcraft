@@ -45,7 +45,7 @@ def previous_chars_matches(
         memory_line = memory[0][i]
         start = j - len(char)
         end = j
-        # do we have to look at next line
+        # we have to look at next line
         if start < 0:
             try:
                 # we have to look at next line too

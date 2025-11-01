@@ -3,7 +3,7 @@ from __future__ import annotations
 from fpdf import FPDF
 
 from classes.cell.CellFactory import CellFactory
-from classes.config import CONFIG
+from classes.config import CONFIG, SWITCH
 from classes.cursor.CursorModifierFactory import CursorModifierFactory
 from classes.cursor.CursorModifierProcessor import CursorModifierProcessor
 from classes.cursor.CursorModifierReducer import CursorModifierReducer
@@ -13,40 +13,41 @@ from classes.models import Cell, Context, CursorModifier, Page
 
 class Book(FPDF):
     def __init__(self) -> Book:
-        super().__init__(unit="pt", format=(475, 925))
+        format = (535, 825) if "ra" in SWITCH else (475, 925)
+
+        super().__init__(unit="pt", format=format)
 
     def header(self) -> None:
+        page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no()
+
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
         self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
         width = self.w - self.l_margin - self.r_margin
         height = CONFIG.TEMPLATE_HEIGHT
-        page_no_width = self.get_string_width(f"{self.page_no()}")
+        page_no_width = self.get_string_width(f"{page_no}")
         subject_width = self.get_string_width(self.subject)
         line_start = self.r_margin
         line_end = self.w - self.r_margin
 
-        # self.cell(width, height, "", 0, 1)
-        # self.cell(width, height, "", 0, 1)
-        # self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
-        # self.cell(width, height, "", 0, 1)
-        self.cell(page_no_width, height, f"{self.page_no()}")
-        self.cell(width - page_no_width - subject_width, height, "", 0)
-        self.cell(subject_width, height, self.subject, 0, 1)
-        self.cell(width, height, "", 0, 1)
-        self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
-        # self.cell(width, height, "", 0, 1)
-        self.cell(width, height, "", 0, 1)
+        if "Cover" not in self.subject:
+            self.cell(page_no_width, height, f"{page_no}")
+            self.cell(width - page_no_width - subject_width, height, "", 0)
+            self.cell(subject_width, height, self.subject, 0, 1)
+            self.cell(width, height, "", 0, 1)
+            self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
+            self.cell(width, height, "", 0, 1)
 
     def footer(self) -> None:
         line_start = self.r_margin
         line_end = self.w - self.r_margin
         bottom = self.h - 35
 
-        self.set_font(**CONFIG.TEMPLATE_FONT)
-        self.set_text_color(*CONFIG.TEMPLATE_COLOR)
-        self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
-        self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
+        if "Cover" not in self.subject:
+            self.set_font(**CONFIG.TEMPLATE_FONT)
+            self.set_text_color(*CONFIG.TEMPLATE_COLOR)
+            self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
+            self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
 
     def set_path(self, book_path: str) -> Book:
         self.book_path = book_path

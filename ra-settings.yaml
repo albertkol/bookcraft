@@ -1,0 +1,85 @@
+title:
+  text: "Royal Arch"
+books:
+  - "Cover Royal Arch"
+  - "Royal Arch"
+colour:
+  enabled: false
+  italic: true
+  roles: true
+  highlight_roles: true
+text:
+  default:
+    height: 23
+    cursor:
+      family: Merriweather
+      style: ""
+      size: 18
+      colour: [0, 0, 0]
+      fill: [255, 255, 255]
+  bold:
+    height: 23
+    cursor:
+      family: Merriweather
+      style: "B"
+      size: 18
+      colour: null
+      fill: null
+  italic:
+    height: 23
+    cursor:
+      family: Merriweather Light
+      style: "I"
+      size: 18
+      colour: [215, 0, 0]
+      fill: [255, 255, 255]
+  heading:
+    height: 23
+    cursor:
+      family: Montserrat Light
+      style: ""
+      size: 18
+      colour: [0, 0, 0]
+      fill: [255, 255, 255]
+  heading_spacing:
+    height: 9
+  template:
+    height: 13.5
+    cursor:
+      family: Montserrat Light
+      style: ""
+      size: 13
+      colour: [0, 0, 0]
+      fill: [255, 255, 255]
+roles:
+  M.E.Z.:
+    dark: [255, 255, 255]
+    light: [255, 255, 255]
+  H.:
+    dark: [108, 158, 235]
+    light: [164, 194, 244]
+  J.:
+    dark: [147, 196, 125]
+    light: [182, 215, 168]
+  P.S.:
+    dark: [142, 124, 195]
+    light: [180, 167, 214]
+  PS.2:
+    dark: [246, 178, 107]
+    light: [249, 203, 156]
+  PS.3:
+    dark: [255, 217, 102]
+    light: [255, 229, 153]
+  Scribe N.:
+    dark: [118, 165, 175]
+    light: [162, 192, 201]
+  Scribe E.:
+    dark: [83, 198, 140]
+    light: [121, 210, 166]
+  Cand.:
+    dark: [255, 128, 179]
+    light: [255, 179, 209]
+page:
+  top_margin: 28.4
+  margin_size: 38.4
+  bottom_margin: 38.4
