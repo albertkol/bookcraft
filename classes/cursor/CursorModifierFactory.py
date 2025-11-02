@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from classes.cursor.rules.BlankSpaceRule import BlankSpaceRule
+from classes.cursor.rules.ContentsItemRule import ContentsItemRulenRule
 from classes.cursor.rules.DarkenRoleRule import DarkenRoleRule
 from classes.cursor.rules.DefaultRule import DefaultRule
 from classes.cursor.rules.HeaderRule import HeaderRule
@@ -76,6 +77,10 @@ class CursorModifierFactory:
         CursorSpecificationRule(
             IsCharEqualSpecification(["-"]),
             HyphenRule(),
+        ),
+        CursorSpecificationRule(
+            LineHasCharSpecification(["&"], 0),
+            ContentsItemRulenRule(),
         ),
         CursorSpecificationRule(
             IsCharEqualSpecification(["%"]),

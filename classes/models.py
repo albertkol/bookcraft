@@ -37,6 +37,7 @@ class RuleType(Enum):
     ITALIC_END = auto()
     KEYWORD = auto()
     BLANK_SPACE = auto()
+    CONTENTS_ITEM = auto()
 
 
 class ItalicType(Enum):

@@ -178,4 +178,8 @@ class Book(FPDF):
                 if cell.text == " ":
                     cell.width = space_width
 
+        for cell in cells:
+            if cell.text == "^":
+                cell.text = " "
+
         return cells

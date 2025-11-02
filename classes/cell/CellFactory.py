@@ -25,7 +25,7 @@ class CellFactory:
         ),
         CellSpecificationRule(
             NotSpecification(
-                IsCharEqualSpecification(["#", ">", "$", "<", "/", "%"])
+                IsCharEqualSpecification(["#", ">", "$", "<", "/", "%", "&"])
             ),
             CharRule(),
         ),
