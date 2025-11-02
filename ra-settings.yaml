@@ -68,17 +68,17 @@ roles:
     dark: [246, 178, 107]
     light: [249, 203, 156]
   PS.3:
-    dark: [255, 217, 102]
-    light: [255, 229, 153]
+    dark: [0, 204, 153]
+    light: [153, 255, 214]
   Scribe N.:
     dark: [118, 165, 175]
     light: [162, 192, 201]
   Scribe E.:
-    dark: [83, 198, 140]
-    light: [121, 210, 166]
+    dark: [0, 230, 230]
+    light: [128, 255, 255]
   Cand.:
-    dark: [255, 128, 179]
-    light: [255, 179, 209]
+    dark: [255, 217, 102]
+    light: [255, 229, 153]
 page:
   top_margin: 28.4
   margin_size: 38.4

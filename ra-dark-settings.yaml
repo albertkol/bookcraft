@@ -20,7 +20,7 @@ text:
   bold:
     height: 23
     cursor:
-      family: Merriweather
+      family: Merriweather Black
       style: "B"
       size: 18
       colour: null
@@ -28,7 +28,7 @@ text:
   italic:
     height: 23
     cursor:
-      family: Montserrat Light
+      family: Merriweather Light
       style: "I"
       size: 18
       colour: [219, 77, 109]
