@@ -171,7 +171,7 @@ class Book(FPDF):
             if cell.text != " ":
                 clean_line_w += cell.width
 
-        char_check = any([char in memory_line for char in ["/", "#"]])
+        char_check = any([char in memory_line for char in ["=", "#"]])
         if memory_line.count(" ") and not char_check:
             space_width = (width - clean_line_w) / memory_line.count(" ")
             for cell in cells:

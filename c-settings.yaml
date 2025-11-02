@@ -2,12 +2,12 @@ title:
   text: "Craft"
 books:
   - "Cover Craft"
-  # - "First Degree"
-  # - "Second Degree"
-  # - "Third Degree"
-  # - "Call off - Call on"
-  # - "Installation"
-  # - "Appendix"
+  - "First Degree"
+  - "Second Degree"
+  - "Third Degree"
+  - "Call off - Call on"
+  - "Installation"
+  - "Appendix"
 colour:
   enabled: false
   italic: true
