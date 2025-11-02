@@ -13,13 +13,12 @@ from classes.models import Cell, Context, CursorModifier, Page
 
 class Book(FPDF):
     def __init__(self) -> Book:
-        format = (535, 825) if "ra" in SWITCH else (475, 925)
+        format = (535, 825) if "ra" in SWITCH else (475, 935)
 
         super().__init__(unit="pt", format=format)
 
     def header(self) -> None:
-        page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no()
-
+        page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no() - 5
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
         self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
@@ -148,8 +147,11 @@ class Book(FPDF):
             cursor = cell.cursor
             self.set_font(cursor.family, cursor.style, cursor.size)
             self.set_text_color(*cursor.colour)
-            self.set_fill_color(*cursor.fill)
-            self.set_draw_color(*cursor.fill)
+            if cursor.fill is not None:
+                self.set_fill_color(*cursor.fill)
+                self.set_draw_color(*cursor.fill)
+            else:
+                cell.has_fill = False
 
             self.cell(
                 w=cell.width,

@@ -1,3 +1,4 @@
+from classes.config import SWITCH
 from classes.cursor.rules.Rule import CursorRule
 from classes.models import Context, Cursor, CursorModifier, RuleType
 
@@ -12,7 +13,7 @@ class ParenthesisRule(CursorRule):
                 size=CONFIG.DEFAULT_CURSOR["size"],
                 style=CONFIG.DEFAULT_CURSOR["style"],
                 # colour=[0, 0, 0],
-                fill=[255, 255, 255],
+                fill=[255, 255, 255] if "dark" not in SWITCH else None,
             ),
             counter=2,
         )

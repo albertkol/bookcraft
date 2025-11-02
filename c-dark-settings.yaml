@@ -1,0 +1,64 @@
+title:
+  text: "Dark Craft"
+books:
+  - "Cover Craft"
+  - "First Degree"
+  - "Second Degree"
+  - "Third Degree"
+  - "Call off - Call on"
+  - "Installation"
+  - "Appendix"
+colour:
+  enabled: false
+  italic: true
+  roles: true
+  highlight_roles: true
+text:
+  default:
+    height: 23
+    cursor:
+      family: Merriweather Light
+      style: ""
+      size: 18
+      colour: [235, 235, 235]
+      fill: null
+  bold:
+    height: 23
+    cursor:
+      family: Merriweather
+      style: "B"
+      size: 18
+      colour: null
+      fill: null
+  italic:
+    height: 23
+    cursor:
+      family: Montserrat Light
+      style: "I"
+      size: 18
+      colour: [130, 180, 255]
+      fill: null
+  heading:
+    height: 23
+    cursor:
+      family: Montserrat Light
+      style: ""
+      size: 18
+      colour: [235, 235, 235]
+      fill: null
+  heading_spacing:
+    height: 9
+  template:
+    height: 13.5
+    cursor:
+      family: Montserrat Light
+      style: ""
+      size: 13
+      colour: [235, 235, 235]
+      fill: null
+roles:
+  none: null
+page:
+  top_margin: 28.4
+  margin_size: 38.4
+  bottom_margin: 38.4

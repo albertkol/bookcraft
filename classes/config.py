@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import yaml
 
-SWITCH = "ra-"
+SWITCH = "c-"
 
 with open("fonts.yaml", "r") as file:
     FONTS = yaml.safe_load(file).get("fonts")

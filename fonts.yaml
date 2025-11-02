@@ -16,7 +16,7 @@ fonts:
     fname: fonts/Merriweather/Merriweather-Light.ttf
   - family: Merriweather Light
     style: I
-    fname: fonts/Merriweather/Merriweather-LightItalic.ttf
+    fname: fonts/Merriweather/Merriweather-Light.ttf
   - family: Merriweather Black
     style: ""
     fname: fonts/Merriweather/Merriweather-Black.ttf

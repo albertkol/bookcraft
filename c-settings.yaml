@@ -1,9 +1,13 @@
 title:
   text: "Craft"
 books:
+  - "Cover Craft"
   - "First Degree"
   - "Second Degree"
   - "Third Degree"
+  - "Call off - Call on"
+  - "Installation"
+  - "Appendix"
 colour:
   enabled: false
   italic: true
@@ -74,6 +78,18 @@ roles:
   Can.:
     dark: [255, 217, 102]
     light: [255, 229, 153]
+  I. M.:
+    dark: [0, 204, 153]
+    light: [153, 255, 214]
+  A. D. C.:
+    dark: [0, 230, 230]
+    light: [128, 255, 255]
+  D. C.:
+    dark: [0, 230, 230]
+    light: [128, 255, 255]
+  M.-E.:
+    dark: [255, 128, 179]
+    light: [255, 179, 209]
 page:
   top_margin: 28.4
   margin_size: 38.4
