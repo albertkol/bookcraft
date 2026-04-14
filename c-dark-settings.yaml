@@ -1,13 +1,13 @@
 title:
   text: "Dark Craft"
 books:
-  - "Cover Craft"
-  - "First Degree"
-  - "Second Degree"
-  - "Third Degree"
-  - "Call off - Call on"
-  - "Installation"
-  - "Appendix"
+  - "Craft/Cover Craft"
+  - "Craft/First Degree"
+  - "Craft/Second Degree"
+  - "Craft/Third Degree"
+  - "Craft/Call off - Call on"
+  - "Craft/Installation"
+  - "Craft/Appendix"
 colour:
   enabled: false
   italic: true

@@ -1,13 +1,13 @@
 title:
   text: "Craft"
 books:
-  - "Cover Craft"
-  - "First Degree"
-  - "Second Degree"
-  - "Third Degree"
-  - "Call off - Call on"
-  - "Installation"
-  - "Appendix"
+  - "Craft/Cover Craft"
+  - "Craft/First Degree"
+  - "Craft/Second Degree"
+  - "Craft/Third Degree"
+  - "Craft/Call off - Call on"
+  - "Craft/Installation"
+  - "Craft/Appendix"
 colour:
   enabled: false
   italic: true
@@ -15,7 +15,7 @@ colour:
   highlight_roles: true
 text:
   default:
-    height: 23
+    height: 22.25
     cursor:
       family: Merriweather
       style: ""
@@ -23,7 +23,7 @@ text:
       colour: [0, 0, 0]
       fill: [255, 255, 255]
   bold:
-    height: 23
+    height: 22.25
     cursor:
       family: Merriweather
       style: "B"
@@ -31,7 +31,7 @@ text:
       colour: null
       fill: null
   italic:
-    height: 23
+    height: 22.25
     cursor:
       family: Merriweather Light
       style: "I"
@@ -39,7 +39,7 @@ text:
       colour: [215, 0, 0]
       fill: [255, 255, 255]
   heading:
-    height: 23
+    height: 22.25
     cursor:
       family: Montserrat Light
       style: ""
@@ -91,6 +91,6 @@ roles:
     dark: [255, 128, 179]
     light: [255, 179, 209]
 page:
-  top_margin: 28.4
-  margin_size: 38.4
-  bottom_margin: 38.4
+  top_margin: 43
+  margin_size: 33
+  bottom_margin: 25.25

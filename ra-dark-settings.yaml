@@ -1,8 +1,8 @@
 title:
   text: "Dark Royal Arch"
 books:
-  - "Cover Royal Arch"
-  - "Royal Arch"
+  - "Royal Arch/Cover"
+  - "Royal Arch/First Degree"
 colour:
   enabled: false
   italic: true

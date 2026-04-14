@@ -13,11 +13,11 @@ from classes.models import Cell, Context, CursorModifier, Page
 
 class Book(FPDF):
     def __init__(self) -> Book:
-        format = (535, 825) if "ra" in SWITCH else (475, 935)
-
+        format = (535, 825) if "ra" in SWITCH else (475, 895)
         super().__init__(unit="pt", format=format)
+        self._page_subjects = {}
 
-    def header(self) -> None:
+    def footer(self) -> None:
         page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no() - 5
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
@@ -25,28 +25,22 @@ class Book(FPDF):
         width = self.w - self.l_margin - self.r_margin
         height = CONFIG.TEMPLATE_HEIGHT
         page_no_width = self.get_string_width(f"{page_no}")
-        subject_width = self.get_string_width(self.subject)
+
+        # Use per-page subject if available
+        subject = self._page_subjects.get(self.page_no(), self.subject)
+        subject_width = self.get_string_width(subject)
+
         line_start = self.r_margin
         line_end = self.w - self.r_margin
 
-        if "Cover" not in self.subject:
-            self.cell(page_no_width, height, f"{page_no}")
-            self.cell(width - page_no_width - subject_width, height, "", 0)
-            self.cell(subject_width, height, self.subject, 0, 1)
-            self.cell(width, height, "", 0, 1)
-            self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
-            self.cell(width, height, "", 0, 1)
-
-    def footer(self) -> None:
-        line_start = self.r_margin
-        line_end = self.w - self.r_margin
-        bottom = self.h - 35
-
-        if "Cover" not in self.subject:
-            self.set_font(**CONFIG.TEMPLATE_FONT)
-            self.set_text_color(*CONFIG.TEMPLATE_COLOR)
-            self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
+        bottom = self.h - 50
+        self.set_y(bottom)
+        if page_no > 0:
             self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
+            self.cell(width, height, "", 0, 1)
+            self.cell(subject_width, height, subject)
+            self.cell(width - page_no_width - subject_width, height, "", 0)
+            self.cell(text=f"{page_no}")
 
     def set_path(self, book_path: str) -> Book:
         self.book_path = book_path
@@ -68,13 +62,16 @@ class Book(FPDF):
         return self
 
     def set_title(self, title: str) -> Book:
+        title = title.split("/")[-1]
         super().set_title(title)
 
         return self
 
     def set_subject(self, subject: str) -> Book:
+        subject = subject.split("/")[-1]
         super().set_subject(subject)
-
+        # Mark all future pages with this subject until changed
+        self._current_subject = subject
         return self
 
     def set_cm_reducer(self, cm_reducer: CursorModifierReducer) -> Book:
@@ -102,8 +99,11 @@ class Book(FPDF):
 
         for page_index in range(1, len(pages) + 1):
             memory = get_pages(self.book_path, page_index, 2)
-
             self._print_page(memory)
+            # After adding a page, record the subject for that page number
+            self._page_subjects[self.page_no()] = getattr(
+                self, "_current_subject", getattr(self, "subject", "")
+            )
 
         return self
 
