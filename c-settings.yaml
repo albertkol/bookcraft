@@ -15,7 +15,7 @@ colour:
   highlight_roles: true
 text:
   default:
-    height: 22.25
+    height: 20
     cursor:
       family: Merriweather
       style: ""
@@ -23,7 +23,7 @@ text:
       colour: [0, 0, 0]
       fill: [255, 255, 255]
   bold:
-    height: 22.25
+    height: 20
     cursor:
       family: Merriweather
       style: "B"
@@ -31,7 +31,7 @@ text:
       colour: null
       fill: null
   italic:
-    height: 22.25
+    height: 20
     cursor:
       family: Merriweather Light
       style: "I"
@@ -39,21 +39,21 @@ text:
       colour: [215, 0, 0]
       fill: [255, 255, 255]
   heading:
-    height: 22.25
+    height: 16
     cursor:
       family: Montserrat Light
       style: ""
-      size: 18
+      size: 16
       colour: [0, 0, 0]
       fill: [255, 255, 255]
   heading_spacing:
-    height: 9
+    height: 3
   template:
-    height: 13.5
+    height: 10
     cursor:
       family: Montserrat Light
       style: ""
-      size: 13
+      size: 10
       colour: [0, 0, 0]
       fill: [255, 255, 255]
 roles:
@@ -91,6 +91,6 @@ roles:
     dark: [255, 128, 179]
     light: [255, 179, 209]
 page:
-  top_margin: 43
-  margin_size: 33
-  bottom_margin: 25.25
+  top_margin: 18
+  margin_size: 40
+  bottom_margin: 15

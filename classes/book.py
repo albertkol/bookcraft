@@ -13,11 +13,11 @@ from classes.models import Cell, Context, CursorModifier, Page
 
 class Book(FPDF):
     def __init__(self) -> Book:
-        format = (535, 825) if "ra" in SWITCH else (475, 895)
+        format = (535, 825) if "ra" in SWITCH else (475, 775)
         super().__init__(unit="pt", format=format)
         self._page_subjects = {}
 
-    def footer(self) -> None:
+    def header(self) -> None:
         page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no() - 5
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
@@ -33,14 +33,26 @@ class Book(FPDF):
         line_start = self.r_margin
         line_end = self.w - self.r_margin
 
-        bottom = self.h - 50
-        self.set_y(bottom)
-        if page_no > 0:
-            self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
-            self.cell(width, height, "", 0, 1)
+        if page_no > 0 and page_no < 150:
             self.cell(subject_width, height, subject)
             self.cell(width - page_no_width - subject_width, height, "", 0)
-            self.cell(text=f"{page_no}")
+            self.cell(page_no_width, height, f"{page_no}", 0, 1)
+            self.cell(width, height, "", 0, 1)
+            self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
+            self.cell(width, height, "", 0, 1)
+            self.cell(width, height / 2, "", 0, 1)
+
+    def footer(self) -> None:
+        page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no() - 5
+        line_start = self.r_margin
+        line_end = self.w - self.r_margin
+        bottom = self.h - 25
+
+        if page_no > 0 and page_no < 150:
+            self.set_font(**CONFIG.TEMPLATE_FONT)
+            self.set_text_color(*CONFIG.TEMPLATE_COLOR)
+            self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
+            self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
 
     def set_path(self, book_path: str) -> Book:
         self.book_path = book_path
