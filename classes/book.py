@@ -43,6 +43,7 @@ class Book(FPDF):
             self.cell(width, height / 2, "", 0, 1)
 
     def footer(self) -> None:
+        return
         page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no() - 5
         line_start = self.r_margin
         line_end = self.w - self.r_margin

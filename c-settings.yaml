@@ -15,7 +15,7 @@ colour:
   highlight_roles: true
 text:
   default:
-    height: 20
+    height: 20.5
     cursor:
       family: Merriweather
       style: ""
@@ -23,7 +23,7 @@ text:
       colour: [0, 0, 0]
       fill: [255, 255, 255]
   bold:
-    height: 20
+    height: 20.5
     cursor:
       family: Merriweather
       style: "B"
@@ -31,7 +31,7 @@ text:
       colour: null
       fill: null
   italic:
-    height: 20
+    height: 20.5
     cursor:
       family: Merriweather Light
       style: "I"
