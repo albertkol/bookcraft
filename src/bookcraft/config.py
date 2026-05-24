@@ -39,7 +39,7 @@ class Config:
 
     @property
     def default_fill(self) -> list[int]:
-        return self.settings.text.default.cursor.fill
+        return self.settings.text.default.cursor.fill or []
 
     @property
     def template_font(self) -> dict:
@@ -48,7 +48,7 @@ class Config:
 
     @property
     def template_color(self) -> list[int]:
-        return self.settings.text.template.cursor.colour
+        return self.settings.text.template.cursor.colour or []
 
     @property
     def template_height(self) -> float:

@@ -37,9 +37,7 @@ class OrSpecification(Specification):
         self.spec2 = spec2
 
     def is_satisfied(self, context: Context) -> bool:
-        return self.spec1.is_satisfied(context) or self.spec2.is_satisfied(
-            context
-        )
+        return self.spec1.is_satisfied(context) or self.spec2.is_satisfied(context)
 
 
 class NotSpecification(Specification):

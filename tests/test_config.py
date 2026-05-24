@@ -1,7 +1,6 @@
 import pytest
 from pydantic import ValidationError
 
-from bookcraft.config import Config
 from bookcraft.schema import Settings
 
 
@@ -39,4 +38,13 @@ def test_roles_accessible_by_name(config):
 
 def test_invalid_settings_raises():
     with pytest.raises(ValidationError):
-        Settings(title="not-a-dict", books=[], colour={}, text={}, roles={}, page={})
+        Settings.model_validate(
+            {
+                "title": "not-a-dict",
+                "books": [],
+                "colour": {},
+                "text": {},
+                "roles": {},
+                "page": {},
+            }
+        )

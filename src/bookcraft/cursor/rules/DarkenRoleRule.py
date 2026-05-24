@@ -7,7 +7,7 @@ class DarkenRoleRule(CursorRule):
     def apply(self, context: Context) -> CursorModifier:
         config = context.config
         role, counter = next_chars_matches(
-            chars=config.roles.keys(),
+            chars=list(config.roles.keys()),
             i=context.i,
             j=context.j,
             memory=context.memory,

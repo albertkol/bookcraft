@@ -7,7 +7,7 @@ from bookcraft.specs.Specification import Specification
 
 class CellRule(ABC):
     @abstractmethod
-    def apply(self, context: Context) -> Cell:
+    def apply(self, context: Context) -> Cell | None:
         pass
 
 

@@ -15,10 +15,12 @@ def test_empty_returns_empty_cursor():
 
 
 def test_last_modifier_wins():
-    result = reducer.reduce([
-        mod(RuleType.DEFAULT, family="Arial", size=12),
-        mod(RuleType.DEFAULT, family="Helvetica", size=14),
-    ])
+    result = reducer.reduce(
+        [
+            mod(RuleType.DEFAULT, family="Arial", size=12),
+            mod(RuleType.DEFAULT, family="Helvetica", size=14),
+        ]
+    )
     assert result.family == "Helvetica"
     assert result.size == 14
 

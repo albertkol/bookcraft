@@ -6,8 +6,8 @@ from typing_extensions import TypeAlias
 
 from bookcraft.config import Config
 
-RGBColour: TypeAlias = tuple[int, int, int]
-Page: TypeAlias = list[list[str]]
+RGBColour: TypeAlias = list[int]
+Page: TypeAlias = list[str]
 
 
 class OFFICE(Enum):
@@ -18,13 +18,6 @@ class OFFICE(Enum):
     JUNIOR_DEACON = "J. D."
     INNER_GUARD = " I. G."
     CANDIDATE = "Can."
-
-
-class FontStyle(Enum):
-    NONE = ""
-    BOLD = "B"
-    ITALIC = "I"
-    ITALICBOLD = "IB"
 
 
 class RuleType(Enum):
@@ -48,7 +41,7 @@ class ItalicType(Enum):
 @dataclass
 class Cursor:
     family: Optional[str] = None
-    style: Optional[FontStyle] = None
+    style: Optional[str] = None
     size: Optional[int] = None
     colour: Optional[RGBColour] = None
     fill: Optional[RGBColour] = None

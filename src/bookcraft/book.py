@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fpdf import FPDF
+from fpdf.enums import XPos, YPos
 
 from bookcraft.cell.CellFactory import CellFactory
 from bookcraft.config import Config
@@ -12,7 +13,7 @@ from bookcraft.models import Cell, Context, CursorModifier, Page
 
 
 class Book(FPDF):
-    def __init__(self, config: Config) -> Book:
+    def __init__(self, config: Config) -> None:
         self.config = config
         format = (535, 785) if config.is_ra else (475, 785)
         super().__init__(unit="pt", format=format)
@@ -31,7 +32,6 @@ class Book(FPDF):
         height = self.config.template_height
         page_no_width = self.get_string_width(f"{page_no}")
 
-        # Use per-page subject if available
         subject = self._page_subjects.get(self.page_no(), self.subject)
         subject_width = self.get_string_width(subject)
 
@@ -40,63 +40,54 @@ class Book(FPDF):
 
         if page_no > 0 and page_no < 150:
             self.cell(subject_width, height, subject)
-            self.cell(width - page_no_width - subject_width, height, "", 0)
-            self.cell(page_no_width, height, f"{page_no}", 0, 1)
-            self.cell(width, height, "", 0, 1)
+            self.cell(width - page_no_width - subject_width, height, "")
+            self.cell(
+                page_no_width, height, f"{page_no}", new_x=XPos.LMARGIN, new_y=YPos.NEXT
+            )
+            self.cell(width, height, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
             self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
-            self.cell(width, height, "", 0, 1)
-            self.cell(width, height / 2, "", 0, 1)
+            self.cell(width, height, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+            self.cell(width, height / 2, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
     def set_path(self, book_path: str) -> Book:
         self.book_path = book_path
-
         return self
 
     def set_book_font(self, fonts) -> Book:
-        [self.add_font(**font.model_dump(), uni=True) for font in fonts]
-
+        [self.add_font(**font.model_dump()) for font in fonts]
         return self
 
-    def set_margin(self, page) -> Book:
+    def configure_margins(self, page) -> Book:
         self.set_top_margin(page.top_margin)
         self.set_left_margin(page.margin_size)
         self.set_right_margin(page.margin_size)
         self.set_auto_page_break(True, page.bottom_margin)
         self.c_margin = 0
-
         return self
 
-    def set_title(self, title: str) -> Book:
+    def set_title(self, title: str) -> None:
         title = title.split("/")[-1]
         super().set_title(title)
 
-        return self
-
-    def set_subject(self, subject: str) -> Book:
+    def set_subject(self, subject: str) -> None:
         subject = subject.split("/")[-1]
         super().set_subject(subject)
-        # Mark all future pages with this subject until changed
         self._current_subject = subject
-        return self
 
     def set_cm_reducer(self, cm_reducer: CursorModifierReducer) -> Book:
         self.cm_reducer = cm_reducer
-
         return self
 
     def set_cm_processor(self, cm_processor: CursorModifierProcessor) -> Book:
         self.cm_processor = cm_processor
-
         return self
 
     def set_cm_factory(self, cm_factory: CursorModifierFactory) -> Book:
         self.cm_factory = cm_factory
-
         return self
 
     def set_cell_factory(self, cell_factory: CellFactory) -> Book:
         self.cell_factory = cell_factory
-
         return self
 
     def set_pages(self, pages: list[Page]) -> Book:
@@ -105,15 +96,16 @@ class Book(FPDF):
         for page_index in range(1, len(pages) + 1):
             memory = get_pages(self.book_path, page_index, 2)
             self._print_page(memory)
-            # After adding a page, record the subject for that page number
-            self._page_subjects[self.page_no()] = getattr(self, "_current_subject", getattr(self, "subject", ""))
+            self._page_subjects[self.page_no()] = getattr(
+                self, "_current_subject", getattr(self, "subject", "")
+            )
 
         return self
 
     def build(self, output_path: str) -> None:
         self.output(output_path)
 
-    def _print_page(self, memory: list[Page]) -> list[CursorModifier]:
+    def _print_page(self, memory: list[Page]) -> None:
         self.add_page()
 
         page = memory[0]
@@ -122,7 +114,6 @@ class Book(FPDF):
             body = []
 
             for j in range(len(line)):
-                # get previous cell cursor
                 cursor = self.cm_reducer.reduce(self.modifiers)
                 context = Context(i, j, memory, self.config, cursor)
 
@@ -130,11 +121,9 @@ class Book(FPDF):
                 self.modifiers.extend(new_cms)
                 self.modifiers = self.cm_processor.process(self.modifiers)
 
-                # get current cell cursor
                 cursor = self.cm_reducer.reduce(self.modifiers)
                 context = Context(i, j, memory, self.config, cursor)
 
-                # get new cells
                 cells = self.cell_factory.create_cells(context)
 
                 if not cells:
@@ -144,32 +133,46 @@ class Book(FPDF):
 
             self._print_line(body, line)
 
-    def _print_line(self, cells: list[Cell], memory_line: list[str]) -> None:
+    def _print_line(self, cells: list[Cell], memory_line: str) -> None:
         cells = self._justify_line(cells, memory_line)
         for cell in cells:
             cursor = cell.cursor
-            self.set_font(cursor.family, cursor.style, cursor.size)
-            self.set_text_color(*cursor.colour)
+            if cursor is None:
+                continue
+            self.set_font(cursor.family, cursor.style or "", cursor.size or 0)
+            if cursor.colour is not None:
+                self.set_text_color(*cursor.colour)
             if cursor.fill is not None:
                 self.set_fill_color(*cursor.fill)
                 self.set_draw_color(*cursor.fill)
             else:
                 cell.has_fill = False
 
-            self.cell(
-                w=cell.width,
-                h=cell.height,
-                txt=cell.text,
-                ln=cell.has_break,
-                fill=cell.has_fill,
-            )
+            if cell.has_break:
+                self.cell(
+                    w=cell.width,
+                    h=cell.height,
+                    text=cell.text,
+                    fill=cell.has_fill,
+                    new_x=XPos.LMARGIN,
+                    new_y=YPos.NEXT,
+                )
+            else:
+                self.cell(
+                    w=cell.width,
+                    h=cell.height,
+                    text=cell.text,
+                    fill=cell.has_fill,
+                )
 
-    def _justify_line(self, cells: list[Cell], memory_line: list[str]) -> list[Cell]:
+    def _justify_line(self, cells: list[Cell], memory_line: str) -> list[Cell]:
         width = self.w - self.l_margin - self.r_margin
         clean_line_w = 0
         for cell in cells:
             cursor = cell.cursor
-            self.set_font(cursor.family, cursor.style, cursor.size)
+            if cursor is None:
+                continue
+            self.set_font(cursor.family, cursor.style or "", cursor.size or 0)
             cell.width = self.get_string_width(cell.text)
             if cell.text != " ":
                 clean_line_w += cell.width

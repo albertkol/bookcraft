@@ -13,4 +13,4 @@ class AfterRoleSpecification(Specification):
             memory=context.memory,
         )
 
-        return asb
+        return asb is not None

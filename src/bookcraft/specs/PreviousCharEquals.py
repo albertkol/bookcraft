@@ -8,9 +8,12 @@ class PreviousCharEquals(Specification):
         self.chars = chars
 
     def is_satisfied(self, context: Context) -> bool:
-        return previous_chars_matches(
-            chars=self.chars,
-            i=context.i,
-            j=context.j,
-            memory=context.memory,
+        return (
+            previous_chars_matches(
+                chars=self.chars,
+                i=context.i,
+                j=context.j,
+                memory=context.memory,
+            )
+            is not None
         )
