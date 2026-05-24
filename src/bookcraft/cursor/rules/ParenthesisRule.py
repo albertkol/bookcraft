@@ -8,9 +8,9 @@ class ParenthesisRule(CursorRule):
         return CursorModifier(
             rule=RuleType.PARENTHESES,
             cursor=Cursor(
-                family=config.DEFAULT_CURSOR["family"],
-                size=config.DEFAULT_CURSOR["size"],
-                style=config.DEFAULT_CURSOR["style"],
+                family=config.default_cursor["family"],
+                size=config.default_cursor["size"],
+                style=config.default_cursor["style"],
                 fill=None if config.is_dark else [255, 255, 255],
             ),
             counter=2,

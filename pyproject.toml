@@ -1,21 +1,23 @@
-[tool.poetry]
+[project]
 name = "bookcraft"
 version = "0.1.0"
 description = "A PDF book generator for structured ritual and ceremonial texts"
-authors = ["Albert Kolozsvari <albertartk@gmail.com>"]
+authors = [{name = "Albert Kolozsvari", email = "albertartk@gmail.com"}]
 readme = "README.md"
-packages = [{include = "bookcraft", from = "src"}]
+requires-python = ">=3.11"
+dependencies = [
+    "fpdf2>=2.8.5",
+    "pydantic>=2.0",
+    "PyYAML>=6.0.2",
+    "typing-extensions>=4.15.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11.0"
-PyYAML = ">=6.0.2"
-pydantic = "^2.0"
-fpdf2 = "^2.8.5"
-typing-extensions = "^4.15.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 bookcraft = "bookcraft.cli:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bookcraft"]

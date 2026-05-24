@@ -6,6 +6,6 @@ class DefaultRule(CursorRule):
     def apply(self, context: Context) -> CursorModifier:
         return CursorModifier(
             rule=RuleType.DEFAULT,
-            cursor=Cursor(**context.config.DEFAULT_CURSOR),
+            cursor=Cursor(**context.config.default_cursor),
             counter=-1,
         )
