@@ -4,13 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["Albert Kolozsvari <albertartk@gmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11.0"
-reportlab = "4.0.4"
-PyYAML = "6.0"
-urllib3 = "<2"
+PyYAML = ">=6.0.2"
 fpdf2 = "^2.8.5"
+typing-extensions = "^4.15.0"
 
 [build-system]
 requires = ["poetry-core"]
