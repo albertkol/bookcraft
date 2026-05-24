@@ -2,7 +2,7 @@ title:
   text: "Dark Royal Arch"
 books:
   - "Royal Arch/Cover"
-  - "Royal Arch/First Degree"
+  - "Royal Arch/Royal Arch"
 colour:
   enabled: false
   italic: true
@@ -54,6 +54,6 @@ text:
 roles:
   none: null
 page:
-  top_margin: 28.4
-  margin_size: 38.4
-  bottom_margin: 38.4
+  top_margin: 18
+  margin_size: 40
+  bottom_margin: 15

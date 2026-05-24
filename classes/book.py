@@ -13,11 +13,15 @@ from classes.models import Cell, Context, CursorModifier, Page
 
 class Book(FPDF):
     def __init__(self) -> Book:
-        format = (535, 825) if "ra" in SWITCH else (475, 775)
+        format = (535, 785) if "ra" in SWITCH else (475, 785)
         super().__init__(unit="pt", format=format)
         self._page_subjects = {}
 
     def header(self) -> None:
+        subject = self._page_subjects.get(self.page_no(), self.subject)
+        if "Cover" in subject and "ra" in SWITCH:
+            return
+
         page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no() - 5
         self.set_font(**CONFIG.TEMPLATE_FONT)
         self.set_text_color(*CONFIG.TEMPLATE_COLOR)
@@ -41,19 +45,6 @@ class Book(FPDF):
             self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
             self.cell(width, height, "", 0, 1)
             self.cell(width, height / 2, "", 0, 1)
-
-    def footer(self) -> None:
-        return
-        page_no = self.page_no() + 22 if "ra" in SWITCH else self.page_no() - 5
-        line_start = self.r_margin
-        line_end = self.w - self.r_margin
-        bottom = self.h - 25
-
-        if page_no > 0 and page_no < 150:
-            self.set_font(**CONFIG.TEMPLATE_FONT)
-            self.set_text_color(*CONFIG.TEMPLATE_COLOR)
-            self.set_draw_color(*CONFIG.TEMPLATE_COLOR)
-            self.dashed_line(line_start, bottom, line_end, bottom, 3, 3)
 
     def set_path(self, book_path: str) -> Book:
         self.book_path = book_path
@@ -114,9 +105,7 @@ class Book(FPDF):
             memory = get_pages(self.book_path, page_index, 2)
             self._print_page(memory)
             # After adding a page, record the subject for that page number
-            self._page_subjects[self.page_no()] = getattr(
-                self, "_current_subject", getattr(self, "subject", "")
-            )
+            self._page_subjects[self.page_no()] = getattr(self, "_current_subject", getattr(self, "subject", ""))
 
         return self
 
