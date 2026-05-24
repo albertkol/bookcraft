@@ -51,9 +51,14 @@ class TitleConfig(BaseModel):
     text: str
 
 
+class ChapterEntry(BaseModel):
+    path: str
+    title: str
+
+
 class Settings(BaseModel):
     title: TitleConfig
-    books: list[str]
+    books: list[ChapterEntry]
     colour: ColourConfig
     text: TextConfig
     roles: dict[str, RoleColours]

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from pathlib import Path
 
 import yaml
 
@@ -85,9 +86,15 @@ def load_config(
     with open(keywords_path, "r") as f:
         raw_keywords = yaml.safe_load(f).get("keywords")
 
+    fonts_dir = Path(fonts_path).parent
+    fonts = [
+        FontEntry(**{**font, "fname": str((fonts_dir / font["fname"]).resolve())})
+        for font in raw_fonts
+    ]
+
     return Config(
         books_path=books_path,
-        fonts=[FontEntry(**font) for font in raw_fonts],
+        fonts=fonts,
         settings=Settings(**raw_settings),
         keywords=raw_keywords,
         switch=switch,
