@@ -11,7 +11,8 @@ _SETTINGS = textwrap.dedent("""\
     title:
       text: Test Lodge
     books:
-      - TestBook
+      - path: TestBook
+        title: Test Book
     colour:
       enabled: false
       italic: false

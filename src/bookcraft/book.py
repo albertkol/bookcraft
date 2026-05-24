@@ -66,11 +66,9 @@ class Book(FPDF):
         return self
 
     def set_title(self, title: str) -> None:
-        title = title.split("/")[-1]
         super().set_title(title)
 
     def set_subject(self, subject: str) -> None:
-        subject = subject.split("/")[-1]
         super().set_subject(subject)
         self._current_subject = subject
 

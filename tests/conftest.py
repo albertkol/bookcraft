@@ -3,6 +3,7 @@ import pytest
 from bookcraft.config import Config
 from bookcraft.models import Context, Cursor
 from bookcraft.schema import (
+    ChapterEntry,
     ColourConfig,
     CursorConfig,
     FontEntry,
@@ -29,7 +30,7 @@ def config():
         fonts=[FontEntry(family="Arial", style="", fname="arial.ttf")],
         settings=Settings(
             title=TitleConfig(text="Test"),
-            books=["TestBook"],
+            books=[ChapterEntry(path="TestBook", title="Test Book")],
             colour=ColourConfig(
                 enabled=False, italic=False, roles=False, highlight_roles=False
             ),

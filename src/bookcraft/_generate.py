@@ -34,17 +34,17 @@ def generate(
     book.set_title(config.settings.title.text)
     book.set_book_font(config.fonts)
 
-    for book_title in config.settings.books:
+    for chapter in config.settings.books:
         if config.is_dark:
             book.page_background = (18, 18, 18)
 
-        book.set_path(books_path + book_title)
+        book.set_path(books_path + chapter.path)
         book.configure_margins(config.page)
-        book.set_subject(book_title)
+        book.set_subject(chapter.title)
         book.set_cm_factory(CursorModifierFactory())
         book.set_cell_factory(CellFactory())
         book.set_cm_processor(CursorModifierProcessor())
         book.set_cm_reducer(CursorModifierReducer())
-        book.set_pages(get_files(books_path + book_title))
+        book.set_pages(get_files(books_path + chapter.path))
 
     book.build(output_path)

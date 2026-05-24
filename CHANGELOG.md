@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 — 2026-05-24
+
+- Expanded test suite: added tests for CLI, config, factory, helpers, specs, and integration
+- Added ruff, ty, and pre-commit to dev toolchain
+- Added codecov configuration and coverage reporting
+- Minor code fixes from static analysis (ruff, ty)
+
 ## 0.2.0 — 2026-05-24
 
 - Refactored into `src/` layout for proper PyPI packaging

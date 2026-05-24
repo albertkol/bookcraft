@@ -73,7 +73,8 @@ def test_load_config(tmp_path):
         title:
           text: Test Book
         books:
-          - TestBook
+          - path: TestBook
+            title: Test Book
         colour:
           enabled: false
           italic: false
