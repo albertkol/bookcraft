@@ -24,7 +24,7 @@ build-backend = "hatchling.build"
 dev = ["pytest>=8.0", "pytest-cov>=6.0"]
 
 [tool.pytest.ini_options]
-addopts = "--cov=bookcraft --cov-report=term-missing"
+addopts = "--cov=bookcraft --cov-report=term-missing --cov-report=xml"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bookcraft"]
