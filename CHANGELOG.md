@@ -1,11 +1,24 @@
 # Changelog
 
-## 0.2.1 — 2026-05-24
+## 0.3.0 — 2026-05-24
 
-- Expanded test suite: added tests for CLI, config, factory, helpers, specs, and integration
+### Breaking changes
+
+- `Settings.books` now expects a list of `ChapterEntry` objects (`path`, `title`) instead of plain strings — update your YAML config accordingly
+- `Book.set_margin()` renamed to `configure_margins()`
+
+### Changes
+
+- Font paths in `fonts.yaml` are now resolved relative to the YAML file's location, making font loading work correctly regardless of working directory
+- Updated fpdf2 API: `cell()` now uses `XPos`/`YPos` enums; removed deprecated `ln` parameter and `uni=True` from `add_font()`
+- `CellRule.apply()` and `CursorRule.apply()` return types now include `None`
+- Removed `FontStyle` enum — font styles are now plain strings
+- Fixed `None` guards in `_print_line` and `_justify_line`
+- Fixed `default_fill` and `template_color` returning `None` instead of `[]`
+- Improved type annotations throughout (`previous_chars_matches`, `next_chars_matches`, `RGBColour`, `Page`)
+- Expanded test suite: CLI, config, factory, helpers, specs, and integration tests
 - Added ruff, ty, and pre-commit to dev toolchain
-- Added codecov configuration and coverage reporting
-- Minor code fixes from static analysis (ruff, ty)
+- Added Codecov configuration
 
 ## 0.2.0 — 2026-05-24
 
