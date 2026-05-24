@@ -82,6 +82,21 @@ Words and abbreviations listed in `keywords.yaml` are automatically rendered in 
 $W. M. The candidate is an E. A.
 ```
 
+## Releasing a new version
+
+1. Bump the version in `pyproject.toml`
+2. Add an entry to `CHANGELOG.md`
+3. Commit and tag:
+
+```bash
+git add pyproject.toml CHANGELOG.md
+git commit -m "Release v0.2.0"
+git tag v0.2.0
+git push && git push --tags
+```
+
+GitHub Actions will build and publish to PyPI automatically.
+
 ## Content layout
 
 Your content project should provide:

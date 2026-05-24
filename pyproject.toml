@@ -1,8 +1,8 @@
 [project]
 name = "bookcraft"
-version = "0.1.0"
+version = "0.2.0"
 description = "A PDF book generator for structured ritual and ceremonial texts"
-authors = [{name = "Albert Kolozsvari", email = "albertartk@gmail.com"}]
+authors = [{name = "Albert Artur Kolozsvari", email = "albertartk@gmail.com"}]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
