@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A PDF book generator for structured ritual and ceremonial texts"
 authors = [{name = "Albert Kolozsvari", email = "albertartk@gmail.com"}]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
     "fpdf2>=2.8.5",
     "pydantic>=2.0",
@@ -14,10 +14,17 @@ dependencies = [
 
 [project.scripts]
 bookcraft = "bookcraft.cli:main"
+test = "pytest:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "pytest-cov>=6.0"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=bookcraft --cov-report=term-missing"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bookcraft"]
