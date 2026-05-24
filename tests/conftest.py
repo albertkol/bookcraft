@@ -15,7 +15,9 @@ from bookcraft.schema import (
     TitleConfig,
 )
 
-_cursor = CursorConfig(family="Arial", style="", size=12, colour=[0, 0, 0], fill=[255, 255, 255])
+_cursor = CursorConfig(
+    family="Arial", style="", size=12, colour=[0, 0, 0], fill=[255, 255, 255]
+)
 _cursor_null = CursorConfig(family="Arial", style="", size=12, colour=None, fill=None)
 _text_style = TextStyleConfig(height=20, cursor=_cursor)
 
@@ -28,7 +30,9 @@ def config():
         settings=Settings(
             title=TitleConfig(text="Test"),
             books=["TestBook"],
-            colour=ColourConfig(enabled=False, italic=False, roles=False, highlight_roles=False),
+            colour=ColourConfig(
+                enabled=False, italic=False, roles=False, highlight_roles=False
+            ),
             text=TextConfig(
                 default=_text_style,
                 bold=TextStyleConfig(height=20, cursor=_cursor_null),
@@ -58,4 +62,5 @@ def make_context(config):
             config=config,
             cursor=cursor or Cursor(),
         )
+
     return _make

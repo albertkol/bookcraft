@@ -4,6 +4,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/bookcraft)](https://pypi.org/project/bookcraft/)
 [![Downloads](https://img.shields.io/pypi/dm/bookcraft)](https://pypi.org/project/bookcraft/)
 [![codecov](https://codecov.io/gh/albertkol/bookcraft/graph/badge.svg)](https://codecov.io/gh/albertkol/bookcraft)
+[![type checked: ty](https://img.shields.io/badge/type%20checked-ty-blue)](https://github.com/astral-sh/ty)
 
 A Python library for generating PDF books from structured text content.
 
@@ -81,6 +82,16 @@ Words and abbreviations listed in `keywords.yaml` are automatically rendered in 
 ```
 $W. M. The candidate is an E. A.
 ```
+
+## Development setup
+
+After cloning, install the pre-commit hooks (one-time):
+
+```bash
+uv run pre-commit install
+```
+
+This runs type checking and tests automatically before every commit.
 
 ## Releasing a new version
 

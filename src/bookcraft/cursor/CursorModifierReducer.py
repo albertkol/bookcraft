@@ -18,11 +18,9 @@ class CursorModifierReducer:
         return cursor
 
     def _is_bold(self, modifiers: list[CursorModifier]) -> bool:
-        return modifiers and modifiers[-1].rule == RuleType.KEYWORD
+        return bool(modifiers) and modifiers[-1].rule == RuleType.KEYWORD
 
     def _is_italic(self, modifiers: list[CursorModifier]) -> bool:
         return any(
-            modifier
-            for modifier in modifiers
-            if modifier.rule == RuleType.ITALIC_START
+            modifier for modifier in modifiers if modifier.rule == RuleType.ITALIC_START
         )

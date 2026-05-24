@@ -39,7 +39,7 @@ def previous_chars_matches(
     i: int,
     j: int,
     memory: list[Page],
-) -> bool:
+) -> str | None:
     match = None
     for char in chars:
         memory_line = memory[0][i]
@@ -74,7 +74,7 @@ def next_chars_matches(
     j: int,
     memory: list[Page],
     inclusive: bool = True,
-) -> list[str, int]:
+) -> tuple[str | None, int]:
     match = None
     match_count = 0
     for char in chars:

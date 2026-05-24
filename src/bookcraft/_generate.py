@@ -23,7 +23,9 @@ def generate(
     mode: str = "craft",
 ) -> None:
     if mode not in _SWITCH_MAP:
-        raise ValueError(f"Unknown mode '{mode}'. Choose from: {', '.join(_SWITCH_MAP)}")
+        raise ValueError(
+            f"Unknown mode '{mode}'. Choose from: {', '.join(_SWITCH_MAP)}"
+        )
 
     switch = _SWITCH_MAP[mode]
     config = load_config(books_path, settings_path, fonts_path, keywords_path, switch)
@@ -37,7 +39,7 @@ def generate(
             book.page_background = (18, 18, 18)
 
         book.set_path(books_path + book_title)
-        book.set_margin(config.page)
+        book.configure_margins(config.page)
         book.set_subject(book_title)
         book.set_cm_factory(CursorModifierFactory())
         book.set_cell_factory(CellFactory())

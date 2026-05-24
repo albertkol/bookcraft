@@ -16,4 +16,4 @@ class NextCharEquals(Specification):
             inclusive=False,
         )
 
-        return match
+        return match is not None

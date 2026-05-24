@@ -7,7 +7,7 @@ from bookcraft.specs.Specification import Specification
 
 class CursorRule(ABC):
     @abstractmethod
-    def apply(self, context: Context) -> CursorModifier:
+    def apply(self, context: Context) -> CursorModifier | None:
         pass
 
 

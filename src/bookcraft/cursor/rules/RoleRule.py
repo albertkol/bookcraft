@@ -7,7 +7,7 @@ class RoleRule(CursorRule):
     def apply(self, context: Context) -> CursorModifier:
         config = context.config
         role, _ = next_chars_matches(
-            chars=config.roles.keys(),
+            chars=list(config.roles.keys()),
             i=context.i,
             j=context.j,
             memory=context.memory,
