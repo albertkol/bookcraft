@@ -1,16 +1,19 @@
 [tool.poetry]
 name = "bookcraft"
 version = "0.1.0"
-description = ""
+description = "A PDF book generator for structured ritual and ceremonial texts"
 authors = ["Albert Kolozsvari <albertartk@gmail.com>"]
 readme = "README.md"
-package-mode = false
+packages = [{include = "bookcraft", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11.0"
 PyYAML = ">=6.0.2"
 fpdf2 = "^2.8.5"
 typing-extensions = "^4.15.0"
+
+[tool.poetry.scripts]
+bookcraft = "bookcraft.cli:main"
 
 [build-system]
 requires = ["poetry-core"]

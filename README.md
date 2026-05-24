@@ -1,22 +1,49 @@
 # bookcraft
 
-Book of the Craft
+A Python library for generating PDF books from structured text content.
 
-## Running
+## Installation
 
-Install dependencies:
-
-```
-poetry install
+```bash
+pip install bookcraft
 ```
 
-Build a PDF using one of the four modes:
+## Usage
+
+```python
+from bookcraft import generate
+
+generate(
+    books_path="./books/",
+    settings_path="./c-settings.yaml",
+    fonts_path="./fonts.yaml",
+    keywords_path="./c-keywords.yaml",
+    output_path="./output/craft.pdf",
+    mode="craft",
+)
+```
+
+### Modes
+
+| Mode | Description |
+|------|-------------|
+| `craft` | Craft, light theme |
+| `craft-dark` | Craft, dark theme |
+| `ra` | Royal Arch, light theme |
+| `ra-dark` | Royal Arch, dark theme |
+
+## Content layout
+
+Your content project should provide:
 
 ```
-make craft        # Craft, light theme
-make craft-dark   # Craft, dark theme
-make ra           # Royal Arch, light theme
-make ra-dark      # Royal Arch, dark theme
+your-project/
+├── books/          # directories of page-N.txt files
+├── fonts/          # font files referenced in fonts.yaml
+├── fonts.yaml
+├── c-settings.yaml
+├── c-keywords.yaml
+├── ra-settings.yaml
+├── ra-keywords.yaml
+└── output/         # generated PDFs written here
 ```
-
-Output is written to the `output/` directory.
