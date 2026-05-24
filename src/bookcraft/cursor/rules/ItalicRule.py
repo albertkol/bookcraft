@@ -13,13 +13,13 @@ class ItalicRule(CursorRule):
         self.type = type
 
     def apply(self, context: Context) -> CursorModifier:
-        CONFIG = context.config
+        config = context.config
         return CursorModifier(
             rule=(
                 RuleType.ITALIC_START
                 if self.type == ItalicType.START
                 else RuleType.ITALIC_END
             ),
-            cursor=Cursor(**CONFIG.ITALIC_CURSOR),
+            cursor=Cursor(**config.italic_cursor),
             counter=-1,
         )

@@ -4,10 +4,10 @@ from bookcraft.models import Cell, Context
 
 class HeaderSpacingRule(CellRule):
     def apply(self, context: Context) -> Cell:
-        CONFIG = context.config
+        config = context.config
         return Cell(
             width=0,
-            height=CONFIG.HEADING_SPACING_HEIGHT,
+            height=config.heading_spacing_height,
             text="",
             has_break=True,
             cursor=context.cursor,

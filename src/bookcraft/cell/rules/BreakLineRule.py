@@ -4,10 +4,10 @@ from bookcraft.models import Cell, Context
 
 class BreakLineRule(CellRule):
     def apply(self, context: Context) -> Cell:
-        CONFIG = context.config
+        config = context.config
         return Cell(
             width=0,
-            height=CONFIG.DEFAULT_HEIGHT,
+            height=config.default_height,
             text="",
             has_break=True,
             cursor=context.cursor,

@@ -12,9 +12,9 @@ class BlankSpaceRule(CursorRule):
             counter += 1
             index += 1
 
-        CONFIG = context.config
+        config = context.config
         return CursorModifier(
             rule=RuleType.BLANK_SPACE,
-            cursor=Cursor(fill=CONFIG.DEFAULT_FILL),
+            cursor=Cursor(fill=config.default_fill),
             counter=counter,
         )

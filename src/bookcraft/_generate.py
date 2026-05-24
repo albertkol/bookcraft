@@ -29,15 +29,15 @@ def generate(
     config = load_config(books_path, settings_path, fonts_path, keywords_path, switch)
 
     book = Book(config)
-    book.set_title(config.SETTINGS["title"]["text"])
-    book.set_book_font(config.FONTS)
+    book.set_title(config.settings.title.text)
+    book.set_book_font(config.fonts)
 
-    for book_title in config.SETTINGS["books"]:
+    for book_title in config.settings.books:
         if config.is_dark:
             book.page_background = (18, 18, 18)
 
         book.set_path(books_path + book_title)
-        book.set_margin(config.PAGE)
+        book.set_margin(config.page)
         book.set_subject(book_title)
         book.set_cm_factory(CursorModifierFactory())
         book.set_cell_factory(CellFactory())

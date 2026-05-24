@@ -7,9 +7,9 @@ from bookcraft.models import Context, Cursor, CursorModifier, RuleType
 
 class KeywordRule(CursorRule):
     def apply(self, context: Context) -> Optional[CursorModifier]:
-        CONFIG = context.config
+        config = context.config
         match, bold_count = next_chars_matches(
-            chars=CONFIG.KEYWORDS,
+            chars=config.keywords,
             i=context.i,
             j=context.j,
             memory=context.memory,
@@ -20,6 +20,6 @@ class KeywordRule(CursorRule):
 
         return CursorModifier(
             rule=RuleType.KEYWORD,
-            cursor=Cursor(**CONFIG.BOLD_CURSOR),
+            cursor=Cursor(**config.bold_cursor),
             counter=bold_count + 1,
         )

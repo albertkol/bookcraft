@@ -9,6 +9,7 @@ packages = [{include = "bookcraft", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.11.0"
 PyYAML = ">=6.0.2"
+pydantic = "^2.0"
 fpdf2 = "^2.8.5"
 typing-extensions = "^4.15.0"
 

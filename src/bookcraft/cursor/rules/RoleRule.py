@@ -5,16 +5,16 @@ from bookcraft.models import Context, Cursor, CursorModifier, RuleType
 
 class RoleRule(CursorRule):
     def apply(self, context: Context) -> CursorModifier:
-        CONFIG = context.config
+        config = context.config
         role, _ = next_chars_matches(
-            chars=CONFIG.ROLES.keys(),
+            chars=config.roles.keys(),
             i=context.i,
             j=context.j,
             memory=context.memory,
             inclusive=False,
         )
 
-        fill = CONFIG.ROLES[role]["light"] if role else CONFIG.DEFAULT_FILL
+        fill = config.roles[role].light if role else config.default_fill
 
         return CursorModifier(
             rule=RuleType.ROLE_HIGHLIGHT,

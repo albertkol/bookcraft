@@ -8,7 +8,7 @@ class ContentsItemRulenRule(CursorRule):
             rule=RuleType.CONTENTS_ITEM,
             cursor=Cursor(
                 size=15,
-                family=context.config.TEXT["heading"]["cursor"]["family"],
+                family=context.config.heading_cursor["family"],
                 style="I",
             ),
             counter=2,

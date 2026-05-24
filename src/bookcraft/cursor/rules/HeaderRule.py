@@ -4,9 +4,9 @@ from bookcraft.models import Context, Cursor, CursorModifier, RuleType
 
 class HeaderRule(CursorRule):
     def apply(self, context: Context) -> CursorModifier:
-        CONFIG = context.config
+        config = context.config
         return CursorModifier(
             rule=RuleType.TITLE,
-            cursor=Cursor(**CONFIG.HEADING_CURSOR),
+            cursor=Cursor(**config.heading_cursor),
             counter=-1,
         )

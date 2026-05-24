@@ -2,13 +2,15 @@ from dataclasses import dataclass
 
 import yaml
 
+from bookcraft.schema import FontEntry, PageConfig, RoleColours, Settings
+
 
 @dataclass
 class Config:
-    BOOKS_PATH: str
-    FONTS: dict
-    SETTINGS: dict
-    KEYWORDS: list
+    books_path: str
+    fonts: list[FontEntry]
+    settings: Settings
+    keywords: list[str]
     switch: str  # "c-", "c-dark-", "ra-", "ra-dark-"
 
     @property
@@ -20,96 +22,53 @@ class Config:
         return "ra" in self.switch
 
     @property
-    def PAGE(self) -> dict:
-        return self.SETTINGS.get("page")
+    def page(self) -> PageConfig:
+        return self.settings.page
 
     @property
-    def COLOUR(self) -> dict:
-        return self.SETTINGS.get("colour")
+    def roles(self) -> dict[str, RoleColours]:
+        return self.settings.roles
 
     @property
-    def ROLES(self) -> dict:
-        return self.SETTINGS.get("roles")
+    def default_cursor(self) -> dict:
+        return self.settings.text.default.cursor.model_dump()
 
     @property
-    def TEXT(self) -> dict:
-        return self.SETTINGS.get("text")
+    def default_height(self) -> float:
+        return self.settings.text.default.height
 
     @property
-    def DEFAULT_CURSOR(self) -> dict:
-        return {
-            "family": self.TEXT["default"]["cursor"]["family"],
-            "style": self.TEXT["default"]["cursor"]["style"],
-            "size": self.TEXT["default"]["cursor"]["size"],
-            "colour": self.TEXT["default"]["cursor"]["colour"],
-            "fill": self.TEXT["default"]["cursor"]["fill"],
-        }
+    def default_fill(self) -> list[int]:
+        return self.settings.text.default.cursor.fill
 
     @property
-    def DEFAULT_FONT(self) -> dict:
-        return {
-            "family": self.TEXT["default"]["cursor"]["family"],
-            "style": self.TEXT["default"]["cursor"]["style"],
-            "size": self.TEXT["default"]["cursor"]["size"],
-        }
+    def template_font(self) -> dict:
+        c = self.settings.text.template.cursor
+        return {"family": c.family, "style": c.style, "size": c.size}
 
     @property
-    def DEFAULT_HEIGHT(self) -> dict:
-        return self.TEXT["default"]["height"]
+    def template_color(self) -> list[int]:
+        return self.settings.text.template.cursor.colour
 
     @property
-    def DEFAULT_FILL(self) -> dict:
-        return self.TEXT["default"]["cursor"]["fill"]
+    def template_height(self) -> float:
+        return self.settings.text.template.height
 
     @property
-    def TEMPLATE_FONT(self) -> dict:
-        return {
-            "family": self.TEXT["template"]["cursor"]["family"],
-            "style": self.TEXT["template"]["cursor"]["style"],
-            "size": self.TEXT["template"]["cursor"]["size"],
-        }
+    def bold_cursor(self) -> dict:
+        return self.settings.text.bold.cursor.model_dump()
 
     @property
-    def TEMPLATE_COLOR(self) -> dict:
-        return self.TEXT["template"]["cursor"]["colour"]
+    def italic_cursor(self) -> dict:
+        return self.settings.text.italic.cursor.model_dump()
 
     @property
-    def TEMPLATE_HEIGHT(self) -> int:
-        return self.TEXT["template"]["height"]
+    def heading_cursor(self) -> dict:
+        return self.settings.text.heading.cursor.model_dump()
 
     @property
-    def BOLD_CURSOR(self) -> dict:
-        return {
-            "family": self.TEXT["bold"]["cursor"]["family"],
-            "style": self.TEXT["bold"]["cursor"]["style"],
-            "size": self.TEXT["bold"]["cursor"]["size"],
-            "colour": self.TEXT["bold"]["cursor"]["colour"],
-            "fill": self.TEXT["bold"]["cursor"]["fill"],
-        }
-
-    @property
-    def ITALIC_CURSOR(self) -> dict:
-        return {
-            "family": self.TEXT["italic"]["cursor"]["family"],
-            "style": self.TEXT["italic"]["cursor"]["style"],
-            "size": self.TEXT["italic"]["cursor"]["size"],
-            "colour": self.TEXT["italic"]["cursor"]["colour"],
-            "fill": self.TEXT["italic"]["cursor"]["fill"],
-        }
-
-    @property
-    def HEADING_CURSOR(self) -> dict:
-        return {
-            "family": self.TEXT["heading"]["cursor"]["family"],
-            "style": self.TEXT["heading"]["cursor"]["style"],
-            "size": self.TEXT["heading"]["cursor"]["size"],
-            "colour": self.TEXT["heading"]["cursor"]["colour"],
-            "fill": self.TEXT["heading"]["cursor"]["fill"],
-        }
-
-    @property
-    def HEADING_SPACING_HEIGHT(self) -> int:
-        return self.TEXT["heading_spacing"]["height"]
+    def heading_spacing_height(self) -> float:
+        return self.settings.text.heading_spacing.height
 
 
 def load_config(
@@ -120,15 +79,16 @@ def load_config(
     switch: str,
 ) -> Config:
     with open(fonts_path, "r") as f:
-        fonts = yaml.safe_load(f).get("fonts")
+        raw_fonts = yaml.safe_load(f).get("fonts")
     with open(settings_path, "r") as f:
-        settings = yaml.safe_load(f)
+        raw_settings = yaml.safe_load(f)
     with open(keywords_path, "r") as f:
-        keywords = yaml.safe_load(f).get("keywords")
+        raw_keywords = yaml.safe_load(f).get("keywords")
+
     return Config(
-        BOOKS_PATH=books_path,
-        FONTS=fonts,
-        SETTINGS=settings,
-        KEYWORDS=keywords,
+        books_path=books_path,
+        fonts=[FontEntry(**font) for font in raw_fonts],
+        settings=Settings(**raw_settings),
+        keywords=raw_keywords,
         switch=switch,
     )

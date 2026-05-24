@@ -24,11 +24,11 @@ class Book(FPDF):
             return
 
         page_no = self.page_no() + 22 if self.config.is_ra else self.page_no() - 5
-        self.set_font(**self.config.TEMPLATE_FONT)
-        self.set_text_color(*self.config.TEMPLATE_COLOR)
-        self.set_draw_color(*self.config.TEMPLATE_COLOR)
+        self.set_font(**self.config.template_font)
+        self.set_text_color(*self.config.template_color)
+        self.set_draw_color(*self.config.template_color)
         width = self.w - self.l_margin - self.r_margin
-        height = self.config.TEMPLATE_HEIGHT
+        height = self.config.template_height
         page_no_width = self.get_string_width(f"{page_no}")
 
         # Use per-page subject if available
@@ -52,16 +52,16 @@ class Book(FPDF):
 
         return self
 
-    def set_book_font(self, fonts: dict) -> Book:
-        [self.add_font(**font, uni=True) for font in fonts]
+    def set_book_font(self, fonts) -> Book:
+        [self.add_font(**font.model_dump(), uni=True) for font in fonts]
 
         return self
 
-    def set_margin(self, page: dict) -> Book:
-        self.set_top_margin(page["top_margin"])
-        self.set_left_margin(page["margin_size"])
-        self.set_right_margin(page["margin_size"])
-        self.set_auto_page_break(True, page["bottom_margin"])
+    def set_margin(self, page) -> Book:
+        self.set_top_margin(page.top_margin)
+        self.set_left_margin(page.margin_size)
+        self.set_right_margin(page.margin_size)
+        self.set_auto_page_break(True, page.bottom_margin)
         self.c_margin = 0
 
         return self

@@ -5,16 +5,16 @@ from bookcraft.models import Context, Cursor, CursorModifier, RuleType
 
 class DarkenRoleRule(CursorRule):
     def apply(self, context: Context) -> CursorModifier:
-        CONFIG = context.config
+        config = context.config
         role, counter = next_chars_matches(
-            chars=CONFIG.ROLES.keys(),
+            chars=config.roles.keys(),
             i=context.i,
             j=context.j,
             memory=context.memory,
             inclusive=False,
         )
 
-        fill = CONFIG.ROLES[role]["dark"] if role else CONFIG.DEFAULT_FILL
+        fill = config.roles[role].dark if role else config.default_fill
 
         return CursorModifier(
             rule=RuleType.ROLE_HIGHLIGHT,
