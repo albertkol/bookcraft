@@ -75,6 +75,10 @@ class Config:
     def heading_spacing_height(self) -> float:
         return self.settings.text.heading_spacing.height
 
+    @property
+    def page_no_offset(self) -> int:
+        return self.settings.page.page_no_offset
+
 
 def load_config(
     books_path: str,

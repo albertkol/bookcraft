@@ -24,7 +24,7 @@ class Book(FPDF):
         if "Cover" in subject or "End" in subject:
             return
 
-        page_no = self.page_no() + 22 if self.config.is_ra else self.page_no() - 5
+        page_no = self.page_no() + self.config.page_no_offset
         self.set_font(**self.config.template_font)
         self.set_text_color(*self.config.template_color)
         self.set_draw_color(*self.config.template_color)

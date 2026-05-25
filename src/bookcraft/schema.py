@@ -46,6 +46,7 @@ class PageConfig(BaseModel):
     top_margin: int
     margin_size: int
     bottom_margin: int
+    page_no_offset: int = 0
 
 
 class TitleConfig(BaseModel):
