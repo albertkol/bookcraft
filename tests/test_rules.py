@@ -13,7 +13,7 @@ from bookcraft.cursor.rules.KeywordRule import KeywordRule
 from bookcraft.cursor.rules.ParenthesisRule import ParenthesisRule
 from bookcraft.cursor.rules.RoleRule import RoleRule
 from bookcraft.cursor.rules.Rule import CursorSpecificationRule
-from bookcraft.models import Cursor, ItalicType, RuleType
+from bookcraft.models import Cursor, MarkerType, RuleType
 from bookcraft.specs.FirstLineSpecification import FirstLineSpecification
 from bookcraft.specs.IsCharEqualSpecification import IsCharEqualSpecification
 
@@ -112,13 +112,13 @@ def test_parenthesis_rule(make_context):
 
 def test_italic_rule_start(make_context):
     ctx = make_context(["hello"])
-    result = ItalicRule(ItalicType.START).apply(ctx)
+    result = ItalicRule(MarkerType.START).apply(ctx)
     assert result.rule == RuleType.ITALIC_START
 
 
 def test_italic_rule_end(make_context):
     ctx = make_context(["hello"])
-    result = ItalicRule(ItalicType.END).apply(ctx)
+    result = ItalicRule(MarkerType.END).apply(ctx)
     assert result.rule == RuleType.ITALIC_END
 
 

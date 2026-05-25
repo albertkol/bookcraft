@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.0.0 — 2026-05-25
+
+### Features
+
+- `~text~` underline rule: wrapping text in `~…~` renders it underlined, using the font and size already active at that position
+- Underline is continuous through justified spaces — space cells in an underlined span are underlined manually to close the gaps fpdf2 leaves
+- `CursorConfig.size` is now optional (null inherits the current font size); the underline cursor defaults to null for all config fields except `style: "U"`
+
+### Changes
+
+- Bold keywords now suppress italic style but not underline: a keyword inside `(…)` renders bold-only; a keyword inside `~…~` renders bold and underlined
+- `CursorModifierReducer` now derives `cursor.style` from logical states (`is_bold`, `is_italic`, `is_underline`) rather than chaining modifier `style` fields — prevents B and U from silently overwriting each other
+- `CursorModifierProcessor` correctly handles simultaneous END markers (e.g. italic and underline closing on the same character)
+- `ItalicType` and `UnderlineType` merged into a single `MarkerType` enum
+- `isBoldSpecification` / `isItalicSpecification` renamed to `IsBoldSpecification` / `IsItalicSpecification`
+- `type` parameter in `ItalicRule` / `UnderlineRule` renamed to `marker` to avoid shadowing the built-in
+- Processor DEFAULT/TITLE reset and `_handle_end` reverse-scan simplified
+
 ## 0.3.1 — 2026-05-25
 
 ### Fixes

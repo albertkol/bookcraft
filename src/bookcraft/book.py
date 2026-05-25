@@ -155,12 +155,32 @@ class Book(FPDF):
                     new_y=YPos.NEXT,
                 )
             else:
+                x_before = self.x
                 self.cell(
                     w=cell.width,
                     h=cell.height,
                     text=cell.text,
                     fill=cell.has_fill,
                 )
+                if cursor.is_underline and cell.text == " ":
+                    y_text = self.y + 0.5 * cell.height + 0.3 * self.font_size
+                    font = self.current_font
+                    up = (
+                        (getattr(font, "up", -100) if font else -100)
+                        / 1000
+                        * self.font_size
+                    )
+                    ut = (
+                        (getattr(font, "ut", 40) if font else 40)
+                        / 1000
+                        * self.font_size
+                    )
+                    if self.fill_color != self.text_color and cursor.colour is not None:
+                        with self.local_context():
+                            self.set_fill_color(*cursor.colour)
+                            self.rect(x_before, y_text - up, cell.width, ut, style="F")
+                    else:
+                        self.rect(x_before, y_text - up, cell.width, ut, style="F")
 
     def _justify_line(self, cells: list[Cell], memory_line: str) -> list[Cell]:
         width = self.w - self.l_margin - self.r_margin

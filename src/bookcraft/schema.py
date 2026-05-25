@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class CursorConfig(BaseModel):
     family: Optional[str] = None
     style: str
-    size: int
+    size: Optional[int] = None
     colour: Optional[list[int]] = None
     fill: Optional[list[int]] = None
 

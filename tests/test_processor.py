@@ -46,3 +46,24 @@ def test_italic_end_removes_italic_end_modifier():
     ]
     result = processor.process(modifiers)
     assert not any(m.rule == RuleType.ITALIC_END for m in result)
+
+
+def test_underline_end_removes_underline_end_modifier():
+    modifiers = [
+        mod(RuleType.UNDERLINE_START, counter=-1),
+        mod(RuleType.UNDERLINE_END, counter=1),
+    ]
+    result = processor.process(modifiers)
+    assert not any(m.rule == RuleType.UNDERLINE_END for m in result)
+
+
+def test_simultaneous_italic_and_underline_end():
+    modifiers = [
+        mod(RuleType.ITALIC_START, counter=-1),
+        mod(RuleType.UNDERLINE_START, counter=-1),
+        mod(RuleType.ITALIC_END, counter=1),
+        mod(RuleType.UNDERLINE_END, counter=1),
+    ]
+    result = processor.process(modifiers)
+    assert not any(m.rule == RuleType.ITALIC_END for m in result)
+    assert not any(m.rule == RuleType.UNDERLINE_END for m in result)

@@ -35,12 +35,7 @@ class RuleType(Enum):
     CONTENTS_ITEM = auto()
 
 
-class ItalicType(Enum):
-    START = "start"
-    END = "end"
-
-
-class UnderlineType(Enum):
+class MarkerType(Enum):
     START = "start"
     END = "end"
 

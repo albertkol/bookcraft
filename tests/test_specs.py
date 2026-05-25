@@ -3,8 +3,8 @@ from bookcraft.specs.AfterRoleSpecification import AfterRoleSpecification
 from bookcraft.specs.FirstLineSpecification import FirstLineSpecification
 from bookcraft.specs.IsCharEqualSpecification import IsCharEqualSpecification
 from bookcraft.specs.IsEndOfLineSpecification import IsEndOfLineSpecification
-from bookcraft.specs.IsBoldSpecification import isBoldSpecification
-from bookcraft.specs.IsItalicSpecification import isItalicSpecification
+from bookcraft.specs.IsBoldSpecification import IsBoldSpecification
+from bookcraft.specs.IsItalicSpecification import IsItalicSpecification
 from bookcraft.specs.LineHasCharSpecification import LineHasCharSpecification
 from bookcraft.specs.NextCharEquals import NextCharEquals
 from bookcraft.specs.PreviousCharEquals import PreviousCharEquals
@@ -57,17 +57,17 @@ def test_line_has_char_false(make_context):
 
 def test_is_bold_true(make_context):
     ctx = make_context(["hello"], cursor=Cursor(is_bold=True))
-    assert isBoldSpecification().is_satisfied(ctx) is True
+    assert IsBoldSpecification().is_satisfied(ctx) is True
 
 
 def test_is_bold_false(make_context):
     ctx = make_context(["hello"], cursor=Cursor(is_bold=False))
-    assert isBoldSpecification().is_satisfied(ctx) is False
+    assert IsBoldSpecification().is_satisfied(ctx) is False
 
 
 def test_is_italic_true(make_context):
     ctx = make_context(["hello"], cursor=Cursor(is_italic=True))
-    assert isItalicSpecification().is_satisfied(ctx) is True
+    assert IsItalicSpecification().is_satisfied(ctx) is True
 
 
 def test_after_role_true(make_context):

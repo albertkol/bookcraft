@@ -12,10 +12,10 @@ from bookcraft.cursor.rules.UnderlineRule import UnderlineRule
 from bookcraft.cursor.rules.ParenthesisRule import ParenthesisRule
 from bookcraft.cursor.rules.RoleRule import RoleRule
 from bookcraft.cursor.rules.Rule import CursorRule, CursorSpecificationRule
-from bookcraft.models import Context, CursorModifier, ItalicType, UnderlineType
+from bookcraft.models import Context, CursorModifier, MarkerType
 from bookcraft.specs.AfterRoleSpecification import AfterRoleSpecification
 from bookcraft.specs.IsCharEqualSpecification import IsCharEqualSpecification
-from bookcraft.specs.IsItalicSpecification import isItalicSpecification
+from bookcraft.specs.IsItalicSpecification import IsItalicSpecification
 from bookcraft.specs.IsUnderlineSpecification import IsUnderlineSpecification
 from bookcraft.specs.LineHasCharSpecification import LineHasCharSpecification
 from bookcraft.specs.NextCharEquals import NextCharEquals
@@ -59,14 +59,14 @@ class CursorModifierFactory:
         ),
         CursorSpecificationRule(
             PreviousCharEquals(["(", ">"]),
-            ItalicRule(ItalicType.START),
+            ItalicRule(MarkerType.START),
         ),
         CursorSpecificationRule(
             AndSpecification(
-                isItalicSpecification(),
+                IsItalicSpecification(),
                 NextCharEquals([")", "<"]),
             ),
-            ItalicRule(ItalicType.END),
+            ItalicRule(MarkerType.END),
         ),
         CursorSpecificationRule(
             PreviousCharEquals([")", "<"]),
@@ -77,14 +77,14 @@ class CursorModifierFactory:
                 IsCharEqualSpecification(["~"]),
                 NotSpecification(IsUnderlineSpecification()),
             ),
-            UnderlineRule(UnderlineType.START),
+            UnderlineRule(MarkerType.START),
         ),
         CursorSpecificationRule(
             AndSpecification(
                 IsCharEqualSpecification(["~"]),
                 IsUnderlineSpecification(),
             ),
-            UnderlineRule(UnderlineType.END),
+            UnderlineRule(MarkerType.END),
         ),
         CursorSpecificationRule(
             NotSpecification(LineHasCharSpecification(["#", "&"], 0)),
