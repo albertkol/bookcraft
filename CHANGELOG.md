@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0 — 2026-05-25
+
+### Features
+
+- `page.page_no_offset` config field: set the integer offset added to the displayed page number in headers. Replaces the hardcoded `+22` (RA) / `−5` (Craft) values that were baked into the library.
+
 ## 1.0.0 — 2026-05-25
 
 ### Features
