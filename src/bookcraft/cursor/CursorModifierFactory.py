@@ -71,7 +71,7 @@ class CursorModifierFactory:
             BlankSpaceRule(),
         ),
         CursorSpecificationRule(
-            NotSpecification(LineHasCharSpecification(["#"], 0)),
+            NotSpecification(LineHasCharSpecification(["#", "&"], 0)),
             KeywordRule(),
         ),
         CursorSpecificationRule(

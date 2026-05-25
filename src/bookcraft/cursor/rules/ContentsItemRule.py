@@ -7,9 +7,9 @@ class ContentsItemRulenRule(CursorRule):
         return CursorModifier(
             rule=RuleType.CONTENTS_ITEM,
             cursor=Cursor(
-                size=15,
-                family=context.config.heading_cursor["family"],
-                style="I",
+                size=13,
+                family="Montserrat Regular",
+                style="",
             ),
             counter=2,
         )

@@ -17,6 +17,24 @@ def test_cursor_modifier_factory_resolves_role_highlight_for_dollar(make_context
     assert RuleType.ROLE_HIGHLIGHT in rules
 
 
+def test_cursor_modifier_factory_resolves_contents_item_for_ampersand_line(
+    make_context,
+):
+    ctx = make_context(["&W. M. Opening"], i=0, j=0)
+    modifiers = CursorModifierFactory().resolve(ctx)
+    rules = [m.rule for m in modifiers]
+    assert RuleType.CONTENTS_ITEM in rules
+
+
+def test_cursor_modifier_factory_does_not_resolve_keyword_on_ampersand_line(
+    make_context,
+):
+    ctx = make_context(["&W. M. Opening"], i=0, j=0)
+    modifiers = CursorModifierFactory().resolve(ctx)
+    rules = [m.rule for m in modifiers]
+    assert RuleType.KEYWORD not in rules
+
+
 def test_cell_factory_creates_cells_for_regular_char(make_context):
     ctx = make_context(
         ["hello"],

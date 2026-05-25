@@ -25,13 +25,23 @@ class CellFactory:
         ),
         CellSpecificationRule(
             NotSpecification(
-                IsCharEqualSpecification(["#", ">", "$", "<", "=", "%", "&"])
+                IsCharEqualSpecification(["#", ">", "$", "<", "=", "%", "&", "@"])
             ),
             CharRule(),
         ),
         CellSpecificationRule(
-            IsEndOfLineSpecification(),
+            AndSpecification(
+                IsEndOfLineSpecification(),
+                NotSpecification(LineHasCharSpecification(["@"], 0)),
+            ),
             BreakLineRule(),
+        ),
+        CellSpecificationRule(
+            AndSpecification(
+                IsEndOfLineSpecification(),
+                LineHasCharSpecification(["@"], 0),
+            ),
+            HeaderSpacingRule(),
         ),
         CellSpecificationRule(
             AndSpecification(

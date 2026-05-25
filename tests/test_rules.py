@@ -133,6 +133,10 @@ def test_contents_item_rule(make_context):
     ctx = make_context(["& item"])
     result = ContentsItemRulenRule().apply(ctx)
     assert result.rule == RuleType.CONTENTS_ITEM
+    assert result.cursor.size == 13
+    assert result.cursor.family == "Montserrat Regular"
+    assert result.cursor.style == ""
+    assert result.counter == 2
 
 
 def test_keyword_rule_returns_none_when_no_match(make_context):
