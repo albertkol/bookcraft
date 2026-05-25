@@ -6,6 +6,7 @@ class CursorModifierReducer:
         cursor = Cursor(
             is_bold=self._is_bold(modifiers),
             is_italic=self._is_italic(modifiers),
+            is_underline=self._is_underline(modifiers),
         )
 
         for modifier in modifiers:
@@ -23,4 +24,11 @@ class CursorModifierReducer:
     def _is_italic(self, modifiers: list[CursorModifier]) -> bool:
         return any(
             modifier for modifier in modifiers if modifier.rule == RuleType.ITALIC_START
+        )
+
+    def _is_underline(self, modifiers: list[CursorModifier]) -> bool:
+        return any(
+            modifier
+            for modifier in modifiers
+            if modifier.rule == RuleType.UNDERLINE_START
         )

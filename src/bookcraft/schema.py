@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class CursorConfig(BaseModel):
-    family: str
+    family: Optional[str] = None
     style: str
     size: int
     colour: Optional[list[int]] = None
@@ -24,6 +24,7 @@ class TextConfig(BaseModel):
     default: TextStyleConfig
     bold: TextStyleConfig
     italic: TextStyleConfig
+    underline: TextStyleConfig
     heading: TextStyleConfig
     heading_spacing: HeadingSpacingConfig
     template: TextStyleConfig

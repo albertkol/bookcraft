@@ -8,13 +8,15 @@ from bookcraft.cursor.rules.HeaderRule import HeaderRule
 from bookcraft.cursor.rules.HyphenRule import HyphenRule
 from bookcraft.cursor.rules.ItalicRule import ItalicRule
 from bookcraft.cursor.rules.KeywordRule import KeywordRule
+from bookcraft.cursor.rules.UnderlineRule import UnderlineRule
 from bookcraft.cursor.rules.ParenthesisRule import ParenthesisRule
 from bookcraft.cursor.rules.RoleRule import RoleRule
 from bookcraft.cursor.rules.Rule import CursorRule, CursorSpecificationRule
-from bookcraft.models import Context, CursorModifier, ItalicType
+from bookcraft.models import Context, CursorModifier, ItalicType, UnderlineType
 from bookcraft.specs.AfterRoleSpecification import AfterRoleSpecification
 from bookcraft.specs.IsCharEqualSpecification import IsCharEqualSpecification
 from bookcraft.specs.IsItalicSpecification import isItalicSpecification
+from bookcraft.specs.IsUnderlineSpecification import IsUnderlineSpecification
 from bookcraft.specs.LineHasCharSpecification import LineHasCharSpecification
 from bookcraft.specs.NextCharEquals import NextCharEquals
 from bookcraft.specs.PreviousCharEquals import PreviousCharEquals
@@ -69,6 +71,20 @@ class CursorModifierFactory:
         CursorSpecificationRule(
             PreviousCharEquals([")", "<"]),
             BlankSpaceRule(),
+        ),
+        CursorSpecificationRule(
+            AndSpecification(
+                IsCharEqualSpecification(["~"]),
+                NotSpecification(IsUnderlineSpecification()),
+            ),
+            UnderlineRule(UnderlineType.START),
+        ),
+        CursorSpecificationRule(
+            AndSpecification(
+                IsCharEqualSpecification(["~"]),
+                IsUnderlineSpecification(),
+            ),
+            UnderlineRule(UnderlineType.END),
         ),
         CursorSpecificationRule(
             NotSpecification(LineHasCharSpecification(["#", "&"], 0)),

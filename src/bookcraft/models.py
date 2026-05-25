@@ -28,12 +28,19 @@ class RuleType(Enum):
     PARENTHESES = auto()
     ITALIC_START = auto()
     ITALIC_END = auto()
+    UNDERLINE_START = auto()
+    UNDERLINE_END = auto()
     KEYWORD = auto()
     BLANK_SPACE = auto()
     CONTENTS_ITEM = auto()
 
 
 class ItalicType(Enum):
+    START = "start"
+    END = "end"
+
+
+class UnderlineType(Enum):
     START = "start"
     END = "end"
 
@@ -47,6 +54,7 @@ class Cursor:
     fill: Optional[RGBColour] = None
     is_italic: bool = False
     is_bold: bool = False
+    is_underline: bool = False
 
 
 @dataclass

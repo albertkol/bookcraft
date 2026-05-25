@@ -24,6 +24,16 @@ class CursorModifierProcessor:
             modifiers = modifiers[::-1]
             modifiers.pop(-1)
 
+        if last_modifier.rule == RuleType.UNDERLINE_END:
+            modifiers = modifiers[::-1]
+            for i in range(len(modifiers)):
+                modifier = modifiers[i]
+                if modifier.rule == RuleType.UNDERLINE_START:
+                    modifier.counter = 2
+                    break
+            modifiers = modifiers[::-1]
+            modifiers.pop(-1)
+
         refreshed_modifiers = self._decrease_counter(modifiers)
 
         return refreshed_modifiers

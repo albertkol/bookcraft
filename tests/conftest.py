@@ -38,6 +38,7 @@ def config():
                 default=_text_style,
                 bold=TextStyleConfig(height=20, cursor=_cursor_null),
                 italic=_text_style,
+                underline=_text_style,
                 heading=_text_style,
                 heading_spacing=HeadingSpacingConfig(height=3),
                 template=_text_style,

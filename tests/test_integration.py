@@ -28,6 +28,9 @@ _SETTINGS = textwrap.dedent("""\
       italic:
         height: 20
         cursor: {family: Helvetica, style: 'I', size: 12, colour: [0,0,0], fill: [255,255,255]}
+      underline:
+        height: 20
+        cursor: {family: Helvetica, style: 'U', size: 12, colour: null, fill: null}
       heading:
         height: 24
         cursor: {family: Helvetica, style: 'B', size: 14, colour: [0,0,0], fill: [255,255,255]}

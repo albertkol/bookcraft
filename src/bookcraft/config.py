@@ -64,6 +64,10 @@ class Config:
         return self.settings.text.italic.cursor.model_dump()
 
     @property
+    def underline_cursor(self) -> dict:
+        return self.settings.text.underline.cursor.model_dump()
+
+    @property
     def heading_cursor(self) -> dict:
         return self.settings.text.heading.cursor.model_dump()
 
