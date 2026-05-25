@@ -21,7 +21,7 @@ class Book(FPDF):
 
     def header(self) -> None:
         subject = self._page_subjects.get(self.page_no(), self.subject)
-        if "Cover" in subject and self.config.is_ra:
+        if "Cover" in subject or "End" in subject:
             return
 
         page_no = self.page_no() + 22 if self.config.is_ra else self.page_no() - 5
@@ -38,16 +38,15 @@ class Book(FPDF):
         line_start = self.r_margin
         line_end = self.w - self.r_margin
 
-        if page_no > 0 and page_no < 150:
-            self.cell(subject_width, height, subject)
-            self.cell(width - page_no_width - subject_width, height, "")
-            self.cell(
-                page_no_width, height, f"{page_no}", new_x=XPos.LMARGIN, new_y=YPos.NEXT
-            )
-            self.cell(width, height, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-            self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
-            self.cell(width, height, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-            self.cell(width, height / 2, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        self.cell(subject_width, height, subject)
+        self.cell(width - page_no_width - subject_width, height, "")
+        self.cell(
+            page_no_width, height, f"{page_no}", new_x=XPos.LMARGIN, new_y=YPos.NEXT
+        )
+        self.cell(width, height, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        self.dashed_line(line_start, self.y, line_end, self.y, 3, 3)
+        self.cell(width, height, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+        self.cell(width, height / 2, "", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
     def set_path(self, book_path: str) -> Book:
         self.book_path = book_path

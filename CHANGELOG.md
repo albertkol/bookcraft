@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1 — 2026-05-25
+
+### Fixes
+
+- Header dashed line is now suppressed for any chapter whose title contains `"Cover"` or `"End"`, replacing the fragile `page_no > 0 and page_no < 150` range check
+- Cover page suppression now applies to all book types, not just Royal Arch
+
 ## 0.3.0 — 2026-05-24
 
 ### Breaking changes
