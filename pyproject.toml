@@ -1,6 +1,6 @@
 [project]
 name = "bookcraft"
-version = "1.2.0"
+version = "1.3.0"
 description = "A PDF book generator for structured ritual and ceremonial texts"
 authors = [{name = "Albert Artur Kolozsvari", email = "albertartk@gmail.com"}]
 readme = "README.md"

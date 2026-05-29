@@ -15,7 +15,7 @@ from bookcraft.models import Cell, Context, CursorModifier, Page
 class Book(FPDF):
     def __init__(self, config: Config) -> None:
         self.config = config
-        format = (535, 785) if config.is_ra else (455, 785)
+        format = (535, 785) if config.is_ra else (450, 785)
         super().__init__(unit="pt", format=format)
         self._page_subjects = {}
 
