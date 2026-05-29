@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 — 2026-05-29
+
+### Changes
+
+- Craft page width reduced from 475 pt to 455 pt
+
 ## 1.1.0 — 2026-05-25
 
 ### Features
